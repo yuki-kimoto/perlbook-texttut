@@ -48,9 +48,6 @@ sub run {
       $data->{title} = "$data->{title} - $site_title";
     }
 
-    # Add page link
-    $api->add_page_link_to_first_h_tag($data, {root => 'index.html'});
-
     # Parse description
     $api->parse_description_from_first_p_tag($data);
 

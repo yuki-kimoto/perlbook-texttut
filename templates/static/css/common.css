@@ -54,6 +54,31 @@
     display:none;
   }
   
+  /* Top page */
+  .top h1 {
+    font-size:36px;
+    text-align:center;
+    padding-top:150px;
+    line-height:1.4;
+    letter-spacing:2px;
+    font-weight:bold;
+  }
+  .top_edition {
+    margin-top:5px;
+    font-size:24px;
+    text-align:center;
+  }
+  .top_author {
+    margin-top:130px;
+    font-size:23px;
+    text-align:center;
+  }
+  .top_publisher {
+    margin-top:330px;
+    font-size:24px;
+    text-align:center;
+  }
+  
   /* tags */
   h2 {
     font-size:24px;
@@ -106,7 +131,12 @@
     margin:10px 0;
     line-height:1.5;
   }
-
+  
+  /* 見開き */
+  .top {
+    
+  }
+  
   table {
     border-collapse: collapse;
     margin-left:15px;
