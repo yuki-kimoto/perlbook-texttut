@@ -16,7 +16,15 @@
   a, a:visited {
     color:#0000EE;
   }
-
+  
+  p {
+    font-size:14px;
+    letter-spacing:0.5px;
+    line-height:1.6;
+    margin-bottom:20px;
+    text-indent:1em;
+  }
+  
   /* container */
   .container {
     background:#eee;
@@ -78,7 +86,14 @@
     font-size:24px;
     text-align:center;
   }
-  
+
+  .beginning h1 {
+    font-size:26px;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:30px;
+  }
+
   /* tags */
   h2 {
     font-size:24px;
@@ -105,12 +120,6 @@
     letter-spacing:0.5px;
     margin:15px 0 18px 0;
     border-bottom:dashed 1px #ddd;
-  }
-  p {
-    font-size:11px;
-    color:#111;
-    margin:10px 0;
-    line-height:1.2;
   }
   pre {
     font-size:11px;
