@@ -28,7 +28,8 @@ sub create_each_pdf_files {
 
   # 低品質(これを指定しないと、見出しの文字が正しく描画されないバグがある)
   my $lowquality = '--lowquality';
-
+  
+  # HTMLをPDFに変換
   my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom $margin_bottom --margin-left $margin_left --margin-right $margin_right --margin-top $margin_top";
 
   # 見開きPDFを作成
@@ -40,23 +41,26 @@ sub create_each_pdf_files {
   # 目次のPDFを作成
   create_pdf_file($wkhtmltopdf_cmd_with_opt, 'public/toc.html', 'public/toc.pdf');
   
-  # 各章の扉を作成
-  {
-    my $wkhtmltopdf_cmd_with_opt_no_margin = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom 0mm --margin-left 0mm --margin-right 0mm --margin-top 0mm";
-    my $chapter_html_file_base = sprintf("chapter%02d_title.html", 1);
-    my $chapter_pdf_file_base = $chapter_html_file_base;
-    $chapter_pdf_file_base =~ s/\.html$/.pdf/;
-    create_pdf_file($wkhtmltopdf_cmd_with_opt_no_margin, "public/$chapter_html_file_base", "public/$chapter_pdf_file_base");
-  }
-  
-    
-  # 各章のPDFを作成
+  # 各章の扉PDFと本文PDFを作成
   for my $chapter_number (1 .. $chapter_number_last) {
-    my $chapter_html_file_base = sprintf("chapter%02d.html", $chapter_number);
-    my $chapter_pdf_file_base = $chapter_html_file_base;
-    $chapter_pdf_file_base =~ s/\.html$/.pdf/;
     
-    create_pdf_file($wkhtmltopdf_cmd_with_opt, "public/$chapter_html_file_base", "public/$chapter_pdf_file_base");
+    # 扉PDFの作成(背景色で埋めるためマージンを0にする)
+    {
+      # HTMLをPDFに変換
+      my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom 0mm --margin-left 0mm --margin-right 0mm --margin-top 0mm";
+      my $chapter_html_file_base = sprintf("chapter%02d_title.html", $chapter_number);
+      my $chapter_pdf_file_base = $chapter_html_file_base;
+      $chapter_pdf_file_base =~ s/\.html$/.pdf/;
+      create_pdf_file($wkhtmltopdf_cmd_with_opt, "public/$chapter_html_file_base", "public/$chapter_pdf_file_base");
+    }
+    
+    # 本文PDFの作成
+    {
+      my $chapter_html_file_base = sprintf("chapter%02d.html", $chapter_number);
+      my $chapter_pdf_file_base = $chapter_html_file_base;
+      $chapter_pdf_file_base =~ s/\.html$/.pdf/;
+      create_pdf_file($wkhtmltopdf_cmd_with_opt, "public/$chapter_html_file_base", "public/$chapter_pdf_file_base");
+    }
   }
 }
 
