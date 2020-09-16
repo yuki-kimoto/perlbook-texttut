@@ -94,14 +94,27 @@ sub concat_pdf_file {
     $all_pdf->page;
   }
   
-  # 各章を結合
+  # 各章の扉と本文を結合
   for my $chapter_number (1 .. $chapter_number_last) {
-    my $chapter_html_file_base = sprintf("chapter%02d.pdf", $chapter_number);
     
-    my $chapter_pdf = PDF::API2->open("$FindBin::Bin/public/$chapter_html_file_base");
-    for my $page_number (1 .. $chapter_pdf->pages) {
-      $all_pdf->import_page($chapter_pdf, $page_number);
+    # 扉を結合
+    {
+      my $chapter_html_file_base = sprintf("chapter%02d_title.pdf", $chapter_number);
+      my $chapter_pdf = PDF::API2->open("$FindBin::Bin/public/$chapter_html_file_base");
+      $all_pdf->import_page($chapter_pdf, 1);
     }
+    
+    # 本文を結合
+    {
+      my $chapter_html_file_base = sprintf("chapter%02d.pdf", $chapter_number);
+      
+      my $chapter_pdf = PDF::API2->open("$FindBin::Bin/public/$chapter_html_file_base");
+      for my $page_number (1 .. $chapter_pdf->pages) {
+        $all_pdf->import_page($chapter_pdf, $page_number);
+      }
+    }
+    
+    # 余白ページ調整
     if ($all_pdf->pages % 2 != 0) {
       $all_pdf->page;
     }
