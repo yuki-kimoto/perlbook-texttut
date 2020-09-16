@@ -98,18 +98,18 @@ sub concat_pdf_file {
     my $font = $all_pdf->corefont('Helvetica');
     my $page = $all_pdf->openpage($page_number);
     my $text_page_number = $page->text();
-    $text_page_number->font($font, 10);
+    $text_page_number->font($font, 8.5);
     
     # 表示ページ番号
     my $display_page_number = $page_number - 2;
 
     # 右開き奇数
     if ($display_page_number % 2 != 0) {
-      $text_page_number->translate(385, 20);
+      $text_page_number->translate(400, 12);
     }
     # 左開き偶数
     else {
-      $text_page_number->translate(30, 20);
+      $text_page_number->translate(15, 12);
     }
     $text_page_number->text($display_page_number);
   }
