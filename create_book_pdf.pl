@@ -24,7 +24,7 @@ sub create_each_pdf_files {
   my $margin_right = '10mm';
 
   # 低品質
-  my $lowquality = '--lowquality';
+  my $lowquality = '';
 
   my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom $margin_bottom --margin-left $margin_left --margin-right $margin_right --margin-top $margin_top";
 
