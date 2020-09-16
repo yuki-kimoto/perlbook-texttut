@@ -7,6 +7,9 @@ use PDF::API2;
 # wkhtmltopdfコマンド
 my $wkhtmltopdf_cmd = '/usr/local/bin/wkhtmltopdf';
 
+# 最終章
+my $chapter_number_last = 11;
+
 # 各ページを作成
 create_each_pdf_files();
 
@@ -24,7 +27,7 @@ sub create_each_pdf_files {
   my $margin_right = '10mm';
 
   # 低品質
-  my $lowquality = '';
+  my $lowquality = '--lowquality';
 
   my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom $margin_bottom --margin-left $margin_left --margin-right $margin_right --margin-top $margin_top";
 
@@ -38,7 +41,7 @@ sub create_each_pdf_files {
   create_pdf_file($wkhtmltopdf_cmd_with_opt, 'public/toc.html', 'public/toc.pdf');
 
   # 各章のPDFを作成
-  for my $chapter_number (1 .. 12) {
+  for my $chapter_number (1 .. $chapter_number_last) {
     my $chapter_html_file_base = sprintf("chapter%02d.html", $chapter_number);
     my $chapter_pdf_file_base = $chapter_html_file_base;
     $chapter_pdf_file_base =~ s/\.html$/.pdf/;
@@ -78,7 +81,6 @@ sub concat_pdf_file {
   }
   
   # 各章を結合
-  my $chapter_number_last = 12;
   for my $chapter_number (1 .. $chapter_number_last) {
     my $chapter_html_file_base = sprintf("chapter%02d.pdf", $chapter_number);
     
