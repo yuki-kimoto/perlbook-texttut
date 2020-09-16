@@ -26,7 +26,7 @@ sub create_each_pdf_files {
   my $margin_left = '10mm';
   my $margin_right = '10mm';
 
-  # 低品質
+  # 低品質(これを指定しないと、見出しの文字が正しく描画されないバグがある)
   my $lowquality = '--lowquality';
 
   my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom $margin_bottom --margin-left $margin_left --margin-right $margin_right --margin-top $margin_top";
