@@ -39,7 +39,17 @@ sub create_each_pdf_files {
 
   # 目次のPDFを作成
   create_pdf_file($wkhtmltopdf_cmd_with_opt, 'public/toc.html', 'public/toc.pdf');
-
+  
+  # 各章の扉を作成
+  {
+    my $wkhtmltopdf_cmd_with_opt_no_margin = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom 0mm --margin-left 0mm --margin-right 0mm --margin-top 0mm";
+    my $chapter_html_file_base = sprintf("chapter%02d_title.html", 1);
+    my $chapter_pdf_file_base = $chapter_html_file_base;
+    $chapter_pdf_file_base =~ s/\.html$/.pdf/;
+    create_pdf_file($wkhtmltopdf_cmd_with_opt_no_margin, "public/$chapter_html_file_base", "public/$chapter_pdf_file_base");
+  }
+  
+    
   # 各章のPDFを作成
   for my $chapter_number (1 .. $chapter_number_last) {
     my $chapter_html_file_base = sprintf("chapter%02d.html", $chapter_number);
