@@ -1,3 +1,14 @@
+# 本のPDFを作成する手順
+# HTML全体のビルド
+# 見開きのPDFを作成
+# 初めにのPDFを作成
+# 各章の扉と本文のPDFを作成
+# 本文全体(扉含む)を作成するために、各章の扉と本文を結合しながら、ページ番号を振っていく。このとき、見出しが含まれるページ番号を保存しておく。
+# 目次のHTMLを作成
+# HTML全体のビルド(目次のため)
+# 目次のPDFを作成
+# 書籍全体を作成するために、見開きPDFとはじめにのPDFと目次のPDFと本文全体のPDFを結合。
+
 use strict;
 use warnings;
 use FindBin;
@@ -10,12 +21,28 @@ use PDF::API2;
 # wkhtmltopdfコマンド
 my $wkhtmltopdf_cmd = '/usr/local/bin/wkhtmltopdf';
 
+# ページサイズ
+my $page_size = 'A5';
+
+# マージン
+my $margin_top = '10mm';
+my $margin_bottom = '10mm';
+my $margin_left = '10mm';
+my $margin_right = '10mm';
+
+# 低品質(これを指定しないと、見出しの文字が正しく描画されないバグがある)
+my $lowquality = '--lowquality';
+
+# HTMLをPDFに変換
+my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom $margin_bottom --margin-left $margin_left --margin-right $margin_right --margin-top $margin_top";
+
 # 最終章
 my $chapter_number_last = 11;
 
 # 目次を自動作成(h1とh2を取得)
 create_toc_html_file();
 
+# HTMLのビルド
 Giblog->build;
 
 # 各ページを作成
@@ -69,21 +96,7 @@ sub create_toc_html_file {
 }
 
 sub create_each_pdf_files {
-  # ページサイズ
-  my $page_size = 'A5';
-
-  # マージン
-  my $margin_top = '10mm';
-  my $margin_bottom = '10mm';
-  my $margin_left = '10mm';
-  my $margin_right = '10mm';
-
-  # 低品質(これを指定しないと、見出しの文字が正しく描画されないバグがある)
-  my $lowquality = '--lowquality';
   
-  # HTMLをPDFに変換
-  my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom $margin_bottom --margin-left $margin_left --margin-right $margin_right --margin-top $margin_top";
-
   # 見開きPDFを作成
   create_pdf_file($wkhtmltopdf_cmd_with_opt, 'public/top.html', 'public/top.pdf');
 
