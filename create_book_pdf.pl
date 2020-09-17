@@ -45,8 +45,17 @@ create_toc_html_file();
 # HTMLのビルド
 Giblog->build;
 
-# 各ページを作成
-create_each_pdf_files();
+# 見開きPDFを作成
+create_top_pdf_file();
+
+# はじめにPDFを作成
+create_beginning_pdf_file();
+
+# 目次PDFを作成
+create_toc_pdf_file();
+
+# 各章の扉PDFと本文PDFを作成
+create_each_chapter_pdf_files();
 
 # PDFを結合して完成原稿を作成
 concat_pdf_file();
@@ -95,16 +104,22 @@ sub create_toc_html_file {
   print $toc_fh encode('UTF-8', $toc_content);
 }
 
-sub create_each_pdf_files {
-  
+sub create_top_pdf_file {
   # 見開きPDFを作成
   create_pdf_file($wkhtmltopdf_cmd_with_opt, 'public/top.html', 'public/top.pdf');
+}
 
+sub create_beginning_pdf_file {
   # はじめにPDFを作成
   create_pdf_file($wkhtmltopdf_cmd_with_opt, 'public/beginning.html', 'public/beginning.pdf');
+}
 
+sub create_toc_pdf_file {
   # 目次のPDFを作成
   create_pdf_file($wkhtmltopdf_cmd_with_opt, 'public/toc.html', 'public/toc.pdf');
+}
+
+sub create_each_chapter_pdf_files {
   
   # 各章の扉PDFと本文PDFを作成
   for my $chapter_number (1 .. $chapter_number_last) {
