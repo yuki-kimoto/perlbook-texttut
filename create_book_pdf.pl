@@ -1,6 +1,9 @@
 use strict;
 use warnings;
 use FindBin;
+use utf8;
+use Encode 'encode', 'decode';
+use Giblog;
 
 use PDF::API2;
 
@@ -10,11 +13,60 @@ my $wkhtmltopdf_cmd = '/usr/local/bin/wkhtmltopdf';
 # 最終章
 my $chapter_number_last = 11;
 
+# 目次を自動作成(h1とh2を取得)
+create_toc_html_file();
+
+Giblog->build;
+
 # 各ページを作成
 create_each_pdf_files();
 
 # PDFを結合して完成原稿を作成
 concat_pdf_file();
+
+# ファイル内容を取得
+sub slurp {
+  my ($file) = @_;
+  
+  open my $fh, '<', $file
+    or die "Can't open file $file:$!";
+  
+  my $content = do { local $/; <$fh> };
+  
+  $content = decode('UTF-8', $content);
+  
+  return $content;
+}
+
+sub create_toc_html_file {
+  my $toc_content = '';
+  $toc_content .= "<h2>目次</h2>\n";
+  for my $chapter_number (1 .. $chapter_number_last) {
+    
+    # 章扉から章見出しを取得
+    my $chapter_title_file = sprintf("$FindBin::Bin/templates/chapter%02d_title.html", $chapter_number);
+    my $chapter_title_content = slurp($chapter_title_file);
+    if ($chapter_title_content =~ m|<h1>(.*)?</h1>|s) {
+      my $h1 = $1;
+      $h1 =~ s|<br>| |g;
+      $toc_content .= "<div>$h1</div>\n";
+    }
+    # 章本文から副見出しを取得
+    my $chapter_file = sprintf("$FindBin::Bin/templates/chapter%02d.html", $chapter_number);
+    my $chapter_content = slurp($chapter_file);
+    while ($chapter_content =~ m|<h2>([^\<]*)</h2>|gs) {
+      my $h2 = $1;
+      $toc_content .= "<div>$h2</div>\n";
+    }
+  }
+  
+  # ファイルに出力
+  my $toc_file = "$FindBin::Bin/templates/toc.html";
+  open my $toc_fh, '>', $toc_file
+    or die "Can't open file $toc_file:$!";
+  
+  print $toc_fh encode('UTF-8', $toc_content);
+}
 
 sub create_each_pdf_files {
   # ページサイズ
@@ -90,6 +142,15 @@ sub concat_pdf_file {
   # はじめに(ページを偶数にする)
   my $beginning_pdf = PDF::API2->open("$FindBin::Bin/public/beginning.pdf");
   $all_pdf->import_page($beginning_pdf);
+  if ($all_pdf->pages % 2 != 0) {
+    $all_pdf->page;
+  }
+
+  # 目次(ページを偶数にする)
+  my $toc_pdf = PDF::API2->open("$FindBin::Bin/public/toc.pdf");
+  for my $page_number (1 .. $toc_pdf->pages) {
+    $all_pdf->import_page($toc_pdf, $page_number);
+  }
   if ($all_pdf->pages % 2 != 0) {
     $all_pdf->page;
   }
