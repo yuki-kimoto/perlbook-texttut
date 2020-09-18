@@ -1,10 +1,19 @@
 <style>
   h2 {
-    counter-increment:count;
+    counter-increment:count1;
+    counter-reset:count2;
   }
   h2:before {
-    content:"1." counter(count) " ";
+    content:"1." counter(count1) " ";
   }
+
+  h3 {
+    counter-increment:count2;
+  }
+  h3:before {
+    content:"1." counter(count1) "." counter(count2) " ";
+  }
+
 </style>
 
 <h2>Perlのインストール方法 - Windows、macOS、Linux対応</h2>
