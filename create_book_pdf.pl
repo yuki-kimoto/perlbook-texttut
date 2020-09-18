@@ -75,7 +75,7 @@ sub slurp {
 }
 
 sub create_toc_html_file {
-  my $toc_content = '';
+  my $toc_content = qq|<div class="toc">\n|;
   $toc_content .= "<h2>目次</h2>\n";
   for my $chapter_number (1 .. $chapter_number_last) {
     
@@ -90,17 +90,23 @@ sub create_toc_html_file {
     # 章本文から副見出しを取得
     my $chapter_file = sprintf("$FindBin::Bin/templates/chapter%02d.html", $chapter_number);
     my $chapter_content = slurp($chapter_file);
-    while ($chapter_content =~ m|<h2>([^\<]*)</h2>|gs) {
-      my $h2 = $1;
-      $toc_content .= qq|<div class="toc_h2">$h2</div>\n|;
-    }
-
-    # 章本文から副見出し2を取得
-    while ($chapter_content =~ m|<h3>([^\<]*)</h3>|gs) {
-      my $h3 = $1;
-      $toc_content .= qq|<div class="toc_h3">$h3</div>\n|;
+    my $h2_count = 0;
+    my $h3_count = 0;
+    while ($chapter_content =~ m#<h(2|3)>([^\<]*)</h(?:2|3)>#gs) {
+      my $head = $1;
+      my $title = $2;
+      if ($head =~ /2/) {
+        $h2_count++;
+        $toc_content .= qq|<div class="toc_h2">$chapter_number.$h2_count $title</div>\n|;
+        $h3_count = 0;
+      }
+      else {
+        $h3_count++;
+        $toc_content .= qq|<div class="toc_h3">$chapter_number.$h2_count.$h3_count $title</div>\n|;
+      }
     }
   }
+  $toc_content .= "</div>\n";
   
   # ファイルに出力
   my $toc_file = "$FindBin::Bin/templates/toc.html";
