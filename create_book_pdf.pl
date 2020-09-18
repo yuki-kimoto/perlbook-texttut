@@ -85,14 +85,20 @@ sub create_toc_html_file {
     if ($chapter_title_content =~ m|<h1>(.*)?</h1>|s) {
       my $h1 = $1;
       $h1 =~ s|<br>| |g;
-      $toc_content .= "<div>$h1</div>\n";
+      $toc_content .= qq|<div class="toc_h1">$h1</div>\n|;
     }
     # 章本文から副見出しを取得
     my $chapter_file = sprintf("$FindBin::Bin/templates/chapter%02d.html", $chapter_number);
     my $chapter_content = slurp($chapter_file);
     while ($chapter_content =~ m|<h2>([^\<]*)</h2>|gs) {
       my $h2 = $1;
-      $toc_content .= "<div>$h2</div>\n";
+      $toc_content .= qq|<div class="toc_h2">$h2</div>\n|;
+    }
+
+    # 章本文から副見出し2を取得
+    while ($chapter_content =~ m|<h3>([^\<]*)</h3>|gs) {
+      my $h3 = $1;
+      $toc_content .= qq|<div class="toc_h3">$h3</div>\n|;
     }
   }
   
