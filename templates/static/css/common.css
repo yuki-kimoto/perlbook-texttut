@@ -108,7 +108,28 @@
     padding-left:1.5em;
     margin-bottom:8px;
   }
+  
+  /* 章扉 */
+  .chapter_title h1 {
+    font-size:40px;
+    padding-top:200px;
+    line-height:2.5;
+    font-weight:bold;
+    letter-spacing:5px;
+    text-align:center;
+  }
 
+/*
+<div style="height:background:red;" class="chapter_heading">
+  <div style="padding-top:200px;font-size:40px;text-align:center;font-weight:bold;letter-spacing:5px;font-weight:bold;">
+    第２章
+  </div>
+  <div style="padding-top:50px;font-size:40px;font-weight:bold;text-align:center;letter-spacing:5px;font-weight:bold;line-height:1.4;">
+    Perlの基本文法
+  </div>
+</div>
+
+*/
   .toc_h3 {
     padding-left:3em;
     margin-bottom:8px;
