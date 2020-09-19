@@ -8,6 +8,10 @@
     -webkit-text-size-adjust:100%;
   }
   
+  body {
+    font-size:14px;
+  }
+  
   a, a:visited {
     color:#0000EE;
   }
@@ -124,6 +128,27 @@
   }
   
   /* 章本文 */
+  .chapter_description {
+    border:1px solid #ddd;
+    border-radius:5px;
+    overflow:hidden;
+  }
+  .chapter_description_left {
+    float:left;
+    width:100px;
+    padding:10px;
+  }
+  .chapter_description_right {
+    float:left;
+    width:450px;
+    padding:10px;
+    padding-top:30px;
+  }
+  
+  .chapter_description img {
+    vertical-align:-20px;
+  }
+  
   .chapter h2 {
     font-size:17px;
     background:#F5F5F5;
