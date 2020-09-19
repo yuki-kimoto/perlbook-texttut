@@ -88,6 +88,7 @@
     margin-bottom:30px;
   }
   
+  /* 目次 */
   .toc h2 {
     text-align:center;
   }
@@ -101,6 +102,10 @@
 
   .toc_h2 {
     padding-left:1.5em;
+    margin-bottom:8px;
+  }
+  .toc_h3 {
+    padding-left:3em;
     margin-bottom:8px;
   }
   
@@ -117,38 +122,29 @@
     letter-spacing:5px;
     text-align:center;
   }
-
-  .toc_h3 {
-    padding-left:3em;
-    margin-bottom:8px;
-  }
-
-  /* tags */
-  h2 {
-    font-size:24px;
-    margin:10px 0;
-    padding-left:20px;
-    letter-spacing:0.5px;
-  }
-  h2 a, h2 a:visited {
-    text-decoration:none;
-    color:#000;
-  }
-  h3 {
-    font-size:16px;
-    letter-spacing:0.5px;
-    margin:15px 0 10px 0;
+  
+  /* 章本文 */
+  .chapter h2 {
+    font-size:17px;
     background:#F5F5F5;
-    margin-top:30px;
-    padding:5px;
+    letter-spacing:1px;
+    margin:18px 0 10px 0;
+    background:#F5F5F5;
+    padding:12px 12px;
   }
-  h4 {
-    font-size:20px;
-    font-weight:bold;
-    padding:6px 0px 4px 5px;
-    letter-spacing:0.5px;
-    margin:15px 0 18px 0;
+
+  .chapter h3 {
+    font-size:16px;
+    letter-spacing:1px;
+    margin:10px 0 8px 0;
+    padding:10px;
     border-bottom:dashed 1px #ddd;
+  }
+  .chapter h4 {
+    font-size:15px;
+    font-weight:bold;
+    padding:12px 0px 10px 5px;
+    letter-spacing:1px;
   }
   pre {
     font-size:11px;
