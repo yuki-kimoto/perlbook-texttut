@@ -223,7 +223,8 @@ sub concat_pdf_file {
   
   # ページ番号を挿入(はじめにから)
   for (my $page_number = 3; $page_number <= $all_pdf->pages; $page_number++) {
-    my $font = $all_pdf->corefont('Helvetica');
+    # my $font = $all_pdf->corefont('Helvetica');
+    my $font = $all_pdf->ttfont('/usr/share/fonts/truetype/fonts-japanese-gothic.ttf');
     my $page = $all_pdf->openpage($page_number);
     my $text_page_number = $page->text();
     $text_page_number->font($font, 8.5);
