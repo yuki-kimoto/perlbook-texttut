@@ -230,7 +230,7 @@ sub concat_pdf_file {
         $all_pdf->import_page($chapter_pdf, $page_number);
         
         # ページ番号が偶数だった場合(右側ページ)に、章のタイトルを追加
-        if ($all_pdf->pages % 2 == 0) {
+        if ($all_pdf->pages % 2 != 0) {
           my $page_all_pdf = $all_pdf->openpage($all_pdf->pages);
           my $text_all_pdf = $page_all_pdf->text();
           $text_all_pdf->font($font, 10);
