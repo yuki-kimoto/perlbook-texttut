@@ -39,6 +39,9 @@ my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_s
 # 最終章
 my $chapter_number_last = 11;
 
+# 章のタイトルの一覧
+my $chapter_titles = [];
+
 # 目次を自動作成(h1とh2を取得)
 create_toc_html_file();
 
@@ -51,14 +54,22 @@ create_top_pdf_file();
 # はじめにPDFを作成
 create_beginning_pdf_file();
 
+print "Start create_toc_pdf_file()\n";
+
 # 目次PDFを作成
 create_toc_pdf_file();
+
+print "Start create_each_chapter_pdf_files()\n";
 
 # 各章の扉PDFと本文PDFを作成
 create_each_chapter_pdf_files();
 
+print "Start concat_pdf_file()\n";
+
 # PDFを結合して完成原稿を作成
 concat_pdf_file();
+
+print "End\n";
 
 # ファイル内容を取得
 sub slurp {
@@ -86,6 +97,7 @@ sub create_toc_html_file {
       my $h1 = $1;
       $h1 =~ s|<br>| |g;
       $toc_content .= qq|<div class="toc_h1">$h1</div>\n|;
+      push @$chapter_titles, $h1;
     }
     # 章本文から副見出しを取得
     my $chapter_file = sprintf("$FindBin::Bin/templates/chapter%02d.html", $chapter_number);
@@ -168,6 +180,9 @@ sub create_pdf_file {
 
 sub concat_pdf_file {
   my $all_pdf = PDF::API2->new();
+  
+  # フォント
+  my $font = $all_pdf->ttfont('/usr/share/fonts/truetype/fonts-japanese-gothic.ttf');
 
   # A5サイズ
   $all_pdf->mediabox('A5');
@@ -211,6 +226,17 @@ sub concat_pdf_file {
       
       my $chapter_pdf = PDF::API2->open("$FindBin::Bin/public/$chapter_html_file_base");
       for my $page_number (1 .. $chapter_pdf->pages) {
+        # 本文ページが奇数だった場合(右側ページ)に、章のタイトルを追加
+        if ($page_number % 2 != 0) {
+          my $page_chapter = $all_pdf->openpage($page_number);
+          my $text_chapter = $page_chapter->text();
+          $text_chapter->font($font, 8.5);
+          $text_chapter->translate(400, 700);
+          my $chapter_title = $chapter_titles->[$chapter_number - 1];
+          $text_chapter->text($chapter_title);
+        }
+        
+        # 本文ページをインポート
         $all_pdf->import_page($chapter_pdf, $page_number);
       }
     }
@@ -223,8 +249,6 @@ sub concat_pdf_file {
   
   # ページ番号を挿入(はじめにから)
   for (my $page_number = 3; $page_number <= $all_pdf->pages; $page_number++) {
-    # my $font = $all_pdf->corefont('Helvetica');
-    my $font = $all_pdf->ttfont('/usr/share/fonts/truetype/fonts-japanese-gothic.ttf');
     my $page = $all_pdf->openpage($page_number);
     my $text_page_number = $page->text();
     $text_page_number->font($font, 8.5);
