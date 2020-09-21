@@ -226,18 +226,18 @@ sub concat_pdf_file {
       
       my $chapter_pdf = PDF::API2->open("$FindBin::Bin/public/$chapter_html_file_base");
       for my $page_number (1 .. $chapter_pdf->pages) {
-        # 本文ページが奇数だった場合(右側ページ)に、章のタイトルを追加
-        if ($page_number % 2 != 0) {
-          my $page_chapter = $all_pdf->openpage($page_number);
-          my $text_chapter = $page_chapter->text();
-          $text_chapter->font($font, 8.5);
-          $text_chapter->translate(400, 700);
-          my $chapter_title = $chapter_titles->[$chapter_number - 1];
-          $text_chapter->text($chapter_title);
-        }
-        
         # 本文ページをインポート
         $all_pdf->import_page($chapter_pdf, $page_number);
+        
+        # ページ番号が偶数だった場合(右側ページ)に、章のタイトルを追加
+        if ($all_pdf->pages % 2 == 0) {
+          my $page_all_pdf = $all_pdf->openpage($all_pdf->pages);
+          my $text_all_pdf = $page_all_pdf->text();
+          $text_all_pdf->font($font, 10);
+          $text_all_pdf->translate(400, 575);
+          my $chapter_title = $chapter_titles->[$chapter_number - 1];
+          $text_all_pdf->text_right($chapter_title);
+        }
       }
     }
     
