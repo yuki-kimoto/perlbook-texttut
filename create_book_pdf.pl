@@ -27,8 +27,8 @@ my $page_size = 'A5';
 # マージン
 my $margin_top = '10mm';
 my $margin_bottom = '10mm';
-my $margin_left = '10mm';
-my $margin_right = '10mm';
+my $margin_left = '13mm';
+my $margin_right = '13mm';
 
 # 低品質(これを指定しないと、見出しの文字が正しく描画されないバグがある)
 my $lowquality = '--lowquality';
