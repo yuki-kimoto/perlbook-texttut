@@ -99,7 +99,7 @@ msiという拡張子は、Windowsのデフォルトのインストーラーで�
 
 コマンドプロンプトというツールをを実行してPerlのバージョンを表示してみます。
 
-コマンドプロンプトは、「スタートメニュー」→「アプリの一覧」→「Windowsシステムツール」→「コマンドプロンプト」から実行できます。
+コマンドプロンプトは画面左下のウインドウズの「スタートメニュー」→「アプリの一覧」→「Windowsシステムツール」→「コマンドプロンプト」から実行できます。
 
 黒い画面がでてくるので、以下の文字をキーボードからうち「Enter」を押してみてください。
 
@@ -110,7 +110,7 @@ perl -v
 次のようにバージョン情報が表示されればインストールは成功しています。
 
 <pre>
-This is perl 5, version 28, subversion 0 (v5.28.0) built for MSWin32-x64-multi-thread
+This is perl 5, version 32, subversion 0 (v5.32.0) built for MSWin32-x64-multi-thread
 </pre>
 
 これでStrawberry Perlのインストールは完了です。
@@ -135,254 +135,128 @@ WSL2と呼ばれるLinux環境をWindows上で有効にして、Perlを実行で
 
 WindowsでPerlを実行するためにはコマンドプロンプトと呼ばれるものを利用します。perlコマンドを使ってPerlスクリプトを実行できるようになります。
 
-コマンドプロンプトの使い方を知りたい方は「<a href="/blog/20080603121251.html">Perlを実行するためのコマンドプロンプト入門</a>」という記事で解説しています。
+Perlのプログラミングは、コマンドと呼ばれるテキストを入力して実行します。まず最初にWindowsにおけるコマンド実行ツールであるコマンドプロンプトについて解説したいと思います。
 
-Strawberry Perlとコマンドプロンプトで、<a href="https://linux.perlzemi.com/">Linux</a>風の環境を作りたいという場合は、以下の記事を参考にしてください。
+<h3>コマンドプロンプトとは</h3>
 
-<ul>
-  <li>
-    <a href="/blog/20200117144713.html">Strawberry PerlとコマンドプロンプトでLinux風環境を作る方法</a>
-  </li>
-</ul>
+コマンドプロンプトとは、Windows環境におけるCUIを用いたプログラムの実行環境です。CUIとは、Character-based User Interfaceの略で、テキストを入力して、プログラムを実行するインターフェースのことです。Windows上で、Perlプログラミングをするときは、コマンドプロンプトを用いて、Perlを実行することになります。
 
+<h3>コマンドプロンプトを実行するには</h3>
 
+「スタート」 - 「すべてのプログラム」 - 「アクセサリ」 - 「コマンドプロンプト」で実行できます。コマンドプロンプトのアイコンを右クリックでドラッグして、デスクトップに、ショートカットを作っておくと便利です。
 
+<h3>最初に覚えておきたいコマンド</h3>
 
+>|
+dir
+cd ディレクトリ名
+<table>
+|<
+</table>
 
+dir で、カレントディレクトリの内容を表示できます。cd ディレクトリ名 で カレントディレクトリを変更することができます。ひとつ上のディレクトリに移動するには、 cd .. とします。
 
+<h3>Perlを実行する</h3>
 
+<pre>
+perl sample.pl arg1 arg2
+</pre>
 
+perlのスクリプトの名前は、.pl という拡張子をつけて保存します。引数を渡したいときは、空白で区切って、引数を続けます。
 
+<h3>空白のある引数を渡す</h3>
 
+<pre>
+perl sample.pl "a i u"
+</pre>
 
+引数に空白が含まれている場合は、ダブルクオーテーションで囲みます。
 
+<h3>ドライブを変更する</h3>
 
+<pre>
+c:
+d:
+</pre>
 
+c: で、C ドライブに、d: で、D ドライブにドライブを変更することができます。
 
+<h3>コマンド履歴を参照する</h3>
 
+<pre>
+↑
+↓
+</pre>
 
+上下キーでコマンド履歴をたどることができます。
 
+<h3>ファイル名を補完する</h3>
 
+<pre>
+Ctrl + f
+</pre>
 
+ファイル名を途中まで入力して、Ctrl + f で、ファイル名を補完することができます。以下で記述するコマンドプロンプトの設定の変更が必要になります。
 
+<h3>コマンドプロンプトの便利な設定</h3>
 
+<b>コマンドプロンプトの設定の変更方法</b>
 
-<h2>続き</h2>
+ショートカットをデスクトップに作ったら、右クリック「プロパティ」で、設定を変更できます。
 
-Perlのインストール方法を解説します。Windows、macOS、LinuxでそれぞれPerlのインストール方法を紹介します。
+<b>作業フォルダの設定とファイル名補完の設定</b>
 
-<ol>
-  <li>
-    <a href="#windows">WindowsにおけるPerlのインストール</a>
-  </li>
-  <li>
-    <a href="#mac">macOSにおけるPerlのインストール</a>
-  </li>
-  <li>
-    <a href="#linux">Unix/LinuxにおけるPerlのインストール</a>
-  </li>
-</ol>
+「ショートカット」タブから作業フォルダの設定とファイル名補完の設定ができます。作業フォルダとは、ショートカットを起動したときの、カレントディレクトリのことです。
 
-<div id="windows"></div>
+ファイル名補完の設定をするには、「リンク先」とかかれた、コマンドプロンプトのパスの最後に、 :/f on と追加します。: の前には、空白が必要です。これで、 「 8. ファイル名を補完 」のコマンドが有効になります。
 
-<h3>WindowsにおけるPerlのインストール</h3>
+例 %SystemRoot%\system32\cmd.exe :/f on
 
-PerlはUnix/Linux生まれの言語ですが、Windowsを使っている人も簡単にPerlをインストールすることができます。3種類の方法を紹介します。
+<b>簡易編集モードの設定</b>
 
-<h4>Strawberry Perlのインストール</h4>
+「オプション」タブから、簡易編集モードの設定ができます。チェックを入れると、右クリックで、コピー＆ペーストができるようになります。
 
-Strawberry Perl(ストロベリーパール)は、WindowsでPerlを使えるように設定されたPerlのひとつです。Linux環境に近い形でPerlが利用できるので、まずはこれがお勧めです。
+<b>フォントサイズの設定</b>
 
-<a href="/blog/20180808153368.html"><img style="border:1px solid #ddd" width="340" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180808/20180808073552.png?1533681423"></a>
+「フォント」タブから、フォントサイズを設定できます。少し小さめにしたほうが見やすいと思います。
 
-<a href="/blog/20180808153368.html">Strawberry Perl(ストロベリーパール)をWindowsにインストールする</a>
+<b>画面バッファサイズの設定</b>
 
-<h4>ActivePerlのインストール</h4>
+「レイアウト」タブから、画面バッファサイズの設定ができます。「高さ」の項目を最大値にしておきます。
 
-ActivePerlも、WindowsでPerlを使えるように設定されたPerlのひとつです。ExcelなどのWindowsアプリと連携したり、GUIの画面を作ったりしたい場合は、これがおすすめです。
+画面バッファサイズ「高さ」を大きくしておくと、画面がスクロールしても、設定した行数分だけ、出力を保存しておくことができます。
 
-<a href="/blog/20080602121231.html"><img style="border:1px solid #ddd" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180809/20180809180334.png?1533805550"></a>
-<a href="/blog/20080602121231.html">ActivePerlをWindowsにインストールする</a>
+<h2>macOSへのPerlのインストール</h2>
 
-<h4>msys2をWindowsにインストールしてPerlを使う</h4>
+macOSには、デフォルトでPerlがインストールされています。ですので、Perlをインストールをしなくても、すぐに使い始めることができます。
 
-msys2はWindows上に完全なLinux環境を再現できるツールです。
+Perlを実行するには、アプリケーション/ユーティリティから、ターミナルを起動しましょう。ターミナルは、コマンドが実行できるCUI端末です。
 
-たとえば、Windowsでは、<a href="/blog/20161103147817.html">プロセス間通信</a>に関する機能が通常ではうまく動きませんが、msys2上であればうまく動きます。
-
-これによって、<a href="/blog/20140319139520.html">Mojolicious</a>の開発Webサーバーなど、プロセス間通信に依存するモジュールが問題なく動きます。
-
-Web開発をWindowsで体験してみたい場合は、お勧めの方法です。
-
-<a href="/blog/20180806153350.html"><img src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180806/20180806080447.png"></a>
-
-<a href="/blog/20180806153350.html">msys2をWindowsにインストールしてPerlを使う</a>
-
-<div id="mac"></div>
-
-<h3>macOSにおけるPerlのインストール</h3>
-
-ITエンジニアといえばmacOSというくらいに、開発者はmacOS所有率が高しです。
-
-macOSにはPerlが標準でインストールされていますが、ユーザー環境に最新のPerlをインストールすることもできたりします。
-
-ユーザー環境にPerlがインストールできるとシステム環境を汚さなくっても済むのでお勧めの方法でもあります。
-
-次の記事では、macOSへのPerlのインストール方法を解説しています。
-
-<a href="/blog/20180814153419.html"><img style="border:1px solid #ddd" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180821/20180821072522.png"></a>
-
-<a href="/blog/20180814153419.html">macOSへのPerlのインストール</a>
-
-<div id="linux"></div>
-
-<h3>Unix/LinuxにおけるPerlのインストール</h3>
-
-Perlで作ったWebサイトを公開する場合は、最終的にはUnix/Linuxのサーバーに配置することになります。
-
-Perlに慣れてくると開発環境をUnix/Linuxそのものにしたほうが開発効率が良くなることでしょう。
-
-本番環境と同じ環境で開発をしたほうが、本番環境と開発環境のずれがなくって、やりやすいということもあります。
-
-次の記事では、Unix/LinuxにおけるPerlのインストール方法を解説していますので参考にしてください。
-
-<a alt="Unix/LinuxへのPerlのインストール" href="/blog/20180813153411.html"><img style="border:1px solid #ddd" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180820/20180820075726.png"></a>
-
-<a href="/blog/20180813153411.html">Unix/LinuxへのPerlのインストール</a>
-
-
-<h2>Strawberry PerlをWindowsにインストールする</h2>
-
-Strawberry Perl(ストロベリーパール)はWindowsでPerlを利用するために作成されたPerlのディストリビューションのひとつです。
-
-<a href="http://strawberryperl.com"><img style="border:#ddd 1px solid" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180808/20180808073552.png?1533681423"></a>
-
-<a href="http://strawberryperl.com">Strawberry Perl for Windows</a>
-
-Strawberry Perlの良いところは、
-
-<ul>
-  <li>
-    Unix/Linux環境のPerlと近い感覚で使うことができる
-  </li>
-  <li>
-    gccなどの開発環境が準備されていて、CPANモジュールがインストール可能
-  </li>
-  <li>
-    古いバージョンのPerlも公開されている
-  </li>
-</ul>
-
-です。
-
-PerlのUnix生まれの言語なので、Windowsでもなるべく<b>Unix環境に近い感覚</b>で利用できると使いやすく感じます。
-
-Strawberry Perlを使うと、<b>ほとんどのCPANモジュールがインストールが可能</b>です。
-
-<b>古いバージョンのPerlもそのまま残してくれている</b>ので、開発をしていて、古いPerlがダウンロードできなくなったという心配もありません。
-
-WindowsでPerlを利用する場合は、一番最初に試してみてほしいPerlです。
-
-以下では、Windows 10を想定して、インストール方法を解説します。Windowsの古いバージョンでも、手順はほとんど同じです。
-
-<h4>Strawberry Perlのダウンロード</h4>
-
-Strawberry Perlをダウンロードして、インストールしてみましょう。2018年の最新のPerlは、Perl 5.28です。
-
-以下のリンクから<b>Strawberry Perl 5.28 64bit MSI installer</b>をクリックして、Strawberry Perlをデスクトップにダウンロードしましょう。
-
-<ul>
-  <li>
-    <a href="http://strawberryperl.com/releases.html">Strawberry Perl Releases</a>
-  </li>
-</ul>
-
-<a href="http://strawberryperl.com/releases.html"><img style="border:1px solid #ddd" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180808/20180808073518.png?1533681603"></a>
-
-MSI installerというのはWindowsのデフォルトのインストーラーという意味です。
-
-末尾のバージョン番号が少し違うこともあるかもしれませんが、気にしないで大丈夫です。
-
-ほとんどの場合は64bit版のWindowsで大丈夫だと思いますが、32bit版が必要な方は、32bitの方のStrawberry Perlをダウンロードしてください。
-
-<h4>Strawberry Perlのインストール</h4>
-
-ダウンロードしたStrawberry Perlをダブルクリックします。
-
-インストーラーが起動します。空き容量の計算に少し時間がかかる場合がありますが、そのまま待ちましょう。
-
-インストーラーが起動しますので「Next」を押して進みます。
-
-途中で「I accept the terms in the License Agreement」というチェックボックスがでてくるので、チェックをいれて「Next」を押します。
-
-さらに「Next」を押して進んでいって、最後に「Install」をクリックするとStrawberry Perlのインストールが始まります。
-
-ここで「この不明な発行元からのアプリがデバイスに変更を加えることを許可しますか?」というダイアログが表示されると思いますが、「はい」をクリックしましょう。
-
-5分くらい時間がかかるので待ちましょう。
-
-プログレスバーが満タンになると、Strawberry Perlのインストールが完了します。
-
-「Finish」を押してダイアログを閉じましょう。Readmeが表示されますが、これも閉じて大丈夫です。
-
-<h4>Perlがインストールされていることの確認</h4>
-
-インストールが完了したら実際にStrawberry Perlがインストールできているか確認してみましょう。
-
-コマンドプロンプトというツールをを実行してPerlのバージョンを表示してみます。
-
-コマンドプロンプトは、「スタートメニュー」→「アプリの一覧」→「Windowsシステムツール」→「コマンドプロンプト」から実行できます。
-
-黒い画面がでてくるので、以下の文字をキーボードからうち「Enter」を押してみてください。
+以下のコマンドでPerlがインストールされているか確認してみましょう。
 
 <pre>
 perl -v
 </pre>
 
-次のようにバージョン情報が表示されればインストールは成功しています。
+もしシステムにデフォルトでインストールされるPerlではなく、ユーザー環境にPerlをインストールしたい場合は、perlbrewやplenvというツールがあるので、覚えておきましょう。
+
+ユーザー環境にPerlがインストールできるとシステム環境を汚さなくっても済むのでお勧めの方法でもあります。
+
+<h2>Unix/LinuxへのPerlのインストール</h2>
+
+ほとんどのUnix/Linuxには、Perlがインストールされています。ですので、ほとんどの場合、Perlのインストールをしなくても、すぐに利用することができます。
+
+以下のコマンドでPerlがインストールされているか確認してみましょう。
 
 <pre>
-This is perl 5, version 28, subversion 0 (v5.28.0) built for MSWin32-x64-multi-thread
+perl -v
 </pre>
 
-これでStrawberry Perlのインストールは完了です。
+ワンライナーを利用する場合に、Perlは、とても便利です。
 
-WindowsでPerlを実行するためにはコマンドプロンプトと呼ばれるものを利用します。perlコマンドを使ってPerlスクリプトを実行できるようになります。
+Webシステム開発などを行う場合で、ユーザー環境にPerlをインストールしたい場合は、perlbrewやplenvというツールがあるので、覚えておきましょう。
 
-コマンドプロンプトの使い方を知りたい方は「<a href="/blog/20080603121251.html">Perlを実行するためのコマンドプロンプト入門</a>」という記事で解説しています。
+<h2>覚えておきたいシェルコマンド</h2>
 
-Strawberry Perlとコマンドプロンプトで、<a href="https://linux.perlzemi.com/">Linux</a>風の環境を作りたいという場合は、以下の記事を参考にしてください。
+macOSやUnix/Linuxでは、CUI端末で作業をしますが、コマンドを実行できるのはシェルという機能があるからです。
 
-<ul>
-  <li>
-    <a href="/blog/20200117144713.html">Strawberry PerlとコマンドプロンプトでLinux風環境を作る方法</a>
-  </li>
-</ul>
-
-<h3>その他のインストール方法</h3>
-
-WindowsでPerlを利用するその他の方法については、以下を参考にしてください。それぞれに長所があります。
-
-<ul>
-  <li>
-    <a href="/blog/20080602121231.html">ActivePerlをWindowsにインストールする</a>
-  </li>
-  <li>
-    <a href="/blog/20180806153350.html">msys2をWindowsにインストールしてPerlを使う</a>
-  </li>
-</ul>
-
-<h3>Strawberry Perlがうまく動かない</h3>
-
-Active PerlやStrawbery Perl 32bitなど別のPerlがインストールされていると、うまく動かない場合があります。別のPerlを<a href="https://win10labo.info/apli-uninstall/">アプリのアンインストール画面</a>からアンインストールして、もう一度Strawberry Perlをインストールしなおしてみてください。
-
-その他のインストール方法
-
-msys2
-WSL2
-perlbrew
-plenv
-
-</div>
-
-<h3>Perlの他のインストール方法</h3>
