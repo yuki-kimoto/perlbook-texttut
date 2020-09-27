@@ -1,1 +1,97 @@
-Perlの基本文法
+<style>
+  h2 {
+    counter-increment:count1;
+    counter-reset:count2;
+  }
+  h2:before {
+    content:"2." counter(count1) " ";
+  }
+
+  h3 {
+    counter-increment:count2;
+  }
+  h3:before {
+    content:"2." counter(count1) "." counter(count2) " ";
+  }
+
+</style>
+
+<div class="chapter">
+<div class="chapter_description">
+  <div class="chapter_description_left">
+    <img width="100" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180820/20180820075726.png">  </div>
+  <div class="chapter_description_right">
+    Perlの基本文法を解説していくよ。テキスト処理を行うために、print文、文字列、変数、配列、if文、for文といった基本的な文法をまず覚える必要があるよ。
+  </div>
+</div>
+
+<h3>画面に文字列を表示する</h3>
+
+まず最初に、プログラミングのABCである「Hello World!」を画面に表示してみましょう。
+
+画面に文字を表示するには、print文を使います。「Hello World」という文字列を表現するにはダブルクォート「"」で文字「Hello World」を囲みます。文字の並びをプログラミングでは、文字列といいます。Perlプログラムの文の最後はセミコロン「;」で終わります。
+
+<pre>
+print "Hello World";
+</pre>
+
+これを「hello.pl」という名前で保存してください。
+
+プログラミングを実行するには、perlコマンドを使用します。
+
+<pre>
+perl hello.pl
+</pre>
+
+画面に以下のように表示されます。
+
+<pre>
+Hello World
+</pre>
+
+「Hello World!」の後ろに改行がされずに、後ろに何か文字が続いている場合があるかもしれません。改行については、少し先で解説します。
+
+プログラムでは、文字列を画面に表示して、プログラムの実行結果を確認します。この作業をプログラムが正しく動くまで繰り返します。
+
+<h3>Perlの文法だけをチェックする</h3>
+
+「-c」オプションを使うと、Perlの文法チェックだけを行うことができます。プログラムは実行されません。Perlの文法チェックだけを先に行いたいときに便利です。
+
+<pre>
+perl -c hello.pl
+</pre>
+
+以下のように出力されます。
+
+<pre>
+hello.pl syntax OK
+</pre>
+
+内部的には、PerlはいったんASTと呼ばれる抽象構文木という構造にコンパイルされて、実行されます。
+
+<h3>改行する</h3>
+
+Perlプログラムで改行をするには「/n」を使います。「/」はバックスラッシュですが、Windows環境であれば円マーク「&yen;」になっています。
+
+<pre>
+print "Hello World\n";
+</pre>
+
+このようなバックスラッシュで始まる特殊な文字をエスケープシーケンスといいます。ダブルクォート「"」で囲まれた文字列の中で「\n」と書くと改行を意味し、これはエスケープシーケンスのひとつです。
+
+これを「hello_newline.pl」という名前で保存してください。
+
+プログラミングを実行するには、perlコマンドを使用します。
+
+<pre>
+perl hello_newline.pl
+</pre>
+
+画面に以下のように表示されます。改行がされています。
+
+<pre>
+Hello World
+</pre>
+
+<h3>コメント</h3>
+
