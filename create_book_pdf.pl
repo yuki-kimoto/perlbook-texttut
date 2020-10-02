@@ -37,7 +37,7 @@ my $lowquality = '--lowquality';
 my $wkhtmltopdf_cmd_with_opt = "$wkhtmltopdf_cmd $lowquality --page-size $page_size --margin-bottom $margin_bottom --margin-left $margin_left --margin-right $margin_right --margin-top $margin_top";
 
 # 最終章
-my $chapter_number_last = 11;
+my $chapter_number_last = 15;
 
 # 章のタイトルの一覧
 my $chapter_titles = [];
