@@ -1,1 +1,50 @@
-文字列処理
+<style>
+  h2 {
+    counter-increment:count1;
+    counter-reset:count2;
+  }
+  h2:before {
+    content:"3." counter(count1) " ";
+  }
+
+  h3 {
+    counter-increment:count2;
+  }
+  h3:before {
+    content:"3." counter(count1) "." counter(count2) " ";
+  }
+</style>
+
+<div class="chapter">
+<div class="chapter_description">
+  <div class="chapter_description_left">
+    <img width="100" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180820/20180820075726.png">
+  </div>
+  <div class="chapter_description_right">
+    Perlの文字列処理について解説していくよ。文字列の表現方法を詳しく解説したり、文字列関数を使って、文字列をつなげたり、分割したりしてみるよ。検索や置換を行う簡単な正規表現の解説もするよ。日本語もつかっちゃおう。
+  </div>
+</div>
+
+<h2>文字列リテラル</h2>
+
+Perlの文字列の表現方法である文字列リテラルについて解説します。Perlの文字列リテラルには、シングルクォート「'」で囲まれたシングルクォート文字列と、ダブルクォート「"」で囲まれた、ダブルクォート文字列があります。
+
+<h3>シングルクォート文字列</h3>
+
+シングルクォート文字列は、変数展開を行わない文字列の表現方法です。記述した文字列は、シングルクォート文字列のエスケープシーケンス以外は、そのまま文字列として扱われます。変数展開とシングルクォート文字列のエスケープシーケンスについては、この後解説します。
+
+<pre>
+# シングルクォート文字列
+
+# 「Hello」
+my $message = 'Hello';
+
+# 「Hello $name」- 変数は展開されない
+my $message = 'Hello $name';
+
+# 「Hello \n」- ダブルクォートのエスケープシーケンス「\n」は、改行として扱われない
+my $message = 'Hello \n';
+</pre>
+
+<h3>シングルクォート文字列のエスケープシーケンス</h3>
+
