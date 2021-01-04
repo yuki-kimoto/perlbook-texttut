@@ -200,6 +200,7 @@
   table {
     border-collapse: collapse;
     margin-left:15px;
+    width:90%;
   }
 
   table th {
