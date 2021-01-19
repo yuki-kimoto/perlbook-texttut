@@ -21,11 +21,8 @@ while (my $line = <>) {
     # カンマで分割して各変数へ
     my ($id, $name, $author, $price, $issued_date) = split(/,/, $line);
     
-    # 出力するための配列を作成
-    my @output_items = ($id, $name, $author, $price, $issued_date);
-    
     # 出力行を作成
-    my $output_line = join(',', @output_items);
+    my $output_line = join(',', $id, $name, $author, $price, $issued_date);
     
     # Perlの内部文字列をUTF-8にエンコードして出力
     print encode('UTF-8', $output_line) . "\n";
