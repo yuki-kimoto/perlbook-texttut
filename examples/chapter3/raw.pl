@@ -18,19 +18,11 @@ while (my $line = <>) {
     # 改行を削除
     chomp $line;
   
-    # カンマで分割して配列へ
-    my @items = split(/,/, $line);
-    
-    # 本の情報をハッシュへ保存
-    my %book;
-    $book{id} = $items[0];
-    $book{name} = $items[1];
-    $book{author} = $items[2];
-    $book{price} = $items[3];
-    $book{issued_on} = $items[4];
+    # カンマで分割して各変数へ
+    my ($id, $name, $author, $price, $issued_date) = split(/,/, $line);
     
     # 出力するための配列を作成
-    my @output_items = ($book{id}, $book{name}, $book{author}, $book{price}, $book{issued_on});
+    my @output_items = ($id, $name, $author, $price, $issued_date);
     
     # 出力行を作成
     my $output_line = join(',', @output_items);
