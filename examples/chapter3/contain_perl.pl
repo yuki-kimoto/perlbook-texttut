@@ -1,4 +1,3 @@
-# contain_perl.pl
 use strict;
 use warnings;
 use utf8;

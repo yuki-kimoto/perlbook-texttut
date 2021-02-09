@@ -18,7 +18,7 @@ while (my $line = <>) {
   # カンマで分割して各変数へ
   my ($id, $name, $author, $price, $issued_date) = split(/,/, $line);
   
-  if ($name =~ /Perl$/) {
+  if ($name =~ /perl/i) {
     # 出力行を作成
     my $output_line = join(',', $id, $name, $author, $price, $issued_date);
     
