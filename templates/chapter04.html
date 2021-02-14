@@ -26,3 +26,34 @@
 
 <h2>正規表現の検索・置換をHTMLで実践</h2>
 
+<h3>見出しのテキストを取得する</h3>
+
+見出し「h1」のテキストを正規表現で取得してみましょう。
+
+<pre>
+<h1>Linuxサーバー管理入門</h1>
+</pre>
+
+正規表現で見出し「h1」のテキストである「UNIX/Linuxサーバー管理入門」を取得してみます。ソースコードはUTF-8で保存してください。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode';
+
+my $html = '<h1>Linuxサーバー管理入門</h1>';
+
+my $head_text;
+if ($html =~ /<h1>(.+)<\/h1>/) {
+  $head_text = $1;
+}
+print encode('UTF-8', "$head_text\n");
+</pre>
+
+出力結果です。Windowsの場合はencode関数の「UTF-8」の部分を「cp932」にしてみてください。
+
+<pre>
+Linuxサーバー管理入門
+</pre>
+
