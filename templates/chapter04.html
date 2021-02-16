@@ -51,7 +51,7 @@ if ($html =~ /<h1>(.+)<\/h1>/) {
 print encode('UTF-8', "$head_text\n");
 </pre>
 
-出力結果です。Windowsの場合はencode関数の「UTF-8」の部分を「cp932」にしてみてください。
+出力結果です。Windowsの場合はencode関数の「UTF-8」の部分を「cp932」にしてみてください。この後のサンプルも同じです。
 
 <pre>
 Linuxサーバー管理入門
@@ -102,4 +102,41 @@ print encode('UTF-8', "$head_text\n");
 
 <pre>
 Linuxサーバー管理入門
+</pre>
+
+<h3>HTMLからタグを削除する</h3>
+
+正規表現で置換の構文を使って、HTMLからタグを削除してテキストの部分だけを取り出してみましょう。
+
+<pre>
+今日は<b>プログラミング</b>を学んで充実した一日。今度は<span style="font-size:18px">Webシステム開発構築</span>を行いたいです。
+</pre>
+
+「<b>」「</b>」「<span style="font-size:18px">」「</span>」を取り除くことができる正規表現を考えます。
+
+プログラムを書きます。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode';
+
+my $html = '今日は<b>プログラミング</b>を学んで充実した一日。今度は<span style="font-size:18px">Webシステム開発構築</span>を行いたいです。';
+
+# 元のHTMLを残しておくために文字列を置換前にコピーする
+my $text = $html;
+
+# <と>で囲まれている部分をすべて削除する
+$text =~ s/<.+?>//g;
+
+print encode('UTF-8', "$text\n");
+</pre>
+
+正規表現の解説です。「<」がきて、改行以外のなんでもよい文字が1文字以上で最短マッチ「.+?」、「>」がくる。gオプションは、すべて置換を意味しています。
+
+出力結果です。タグが取り除かれています。
+
+<pre>
+今日はプログラミングを学んで充実した一日。今度はWebシステム開発構築を行いたいです。
 </pre>
