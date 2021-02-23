@@ -302,3 +302,75 @@ my $html = <<"EOS";
   </p>
 EOS
 </pre>
+
+<h2>HTMLファイルを処理する</h2>
+
+HTMLファイルを読み込んで、処理してみましょう。上記、ヒアドキュメントで書いた内容を、入力ファイルに書いてUTF-8で保存してみます。
+
+ファイルの内容を一度に読み込むには、行入力演算子のセパレターを表現する特殊変数「$/」を未定義にして、ファイル入力演算子で読み込みます。ファイルから読み込んだ内容は、decode関数でデコードして、Perlの内部文字列にするのを忘れないでください。
+
+<pre>
+# ファイル全部を読み込む
+my $html;
+{
+  local $/ = undef;
+  $html = <>;
+  $html = decode('UTF-8', $html);
+}
+</pre>
+
+入力ファイル「process_html_file_input.html」は、以下の内容で、UTF-8で保存してください。
+
+<pre>
+  <p>
+    今日は、毎週土曜日更新のPerlプログラミングちゃんねるを見ています。
+    
+    ひげで、坊主のオジサンが雑にしゃべっているのが気になり、講義が頭の中に入ってきません。
+  </p>
+</pre>
+
+HTMLファイルを読み込んで処理して、出力するサンプルです。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode', 'decode';
+
+# ファイル全部を読み込む
+my $html;
+{
+  local $/ = undef;
+  $html = <>;
+  $html = decode('UTF-8', $html);
+}
+
+my $text;
+if ($html =~ /<p>(.*?)<\/p>/s) {
+  $text = $1;
+  
+  # 先頭の空白文字を削除
+  $text =~ s/^\s+//;
+  
+  # 末尾の空白文字を削除
+  $text =~ s/\s+$//;
+  
+  # 複数の空白文字を一つの空白へ
+  $text =~ s/\s+/ /;
+}
+
+print encode('UTF-8', "$text\n");
+</pre>
+
+次のように実行してください。
+
+<pre>
+perl process_html_file.pl process_html_file_input.html > process_html_file_output.txt
+</pre>
+
+「process_html_file_output.txt」ファイルには、以下の内容が出力されます。
+
+<pre>
+今日は、毎週土曜日更新のPerlプログラミングちゃんねるを見ています。 ひげで、坊主のオジサンが雑にしゃべっているのが気になり、講義が頭の中に入ってきません。
+</pre>
+
