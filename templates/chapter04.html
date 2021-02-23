@@ -305,6 +305,10 @@ EOS
 
 <h2>HTMLファイルを処理する</h2>
 
+今度は、HTMLファイルの全体を処理する方法について学んでみましょう。
+
+<h3>HTMLファイルを読み込む</h3>
+
 HTMLファイルを読み込んで、処理してみましょう。上記、ヒアドキュメントで書いた内容を、入力ファイルに書いてUTF-8で保存してみます。
 
 ファイルの内容を一度に読み込むには、行入力演算子のセパレターを表現する特殊変数「$/」を未定義にして、ファイル入力演算子で読み込みます。ファイルから読み込んだ内容は、decode関数でデコードして、Perlの内部文字列にするのを忘れないでください。
@@ -374,3 +378,62 @@ perl process_html_file.pl process_html_file_input.html > process_html_file_outpu
 今日は、毎週土曜日更新のPerlプログラミングちゃんねるを見ています。 ひげで、坊主のオジサンが雑にしゃべっているのが気になり、講義が頭の中に入ってきません。
 </pre>
 
+<h3>すべてのバナナをリンゴに置換する</h3>
+
+テキストファイル「replace_banana_apple_input.html」(UTF-8で保存)に含まれるすべてのバナナをリンゴに置換してみましょう。
+
+<pre>
+モジガエルは、バナナを食べています。
+
+バナナは、まだ青く熟していません。
+
+「早く、バナナが食べごろにならないかなぁ」
+</pre>
+
+すべて置換するには、gオプションを使用します。
+
+<pre>
+# すべてのバナナをリンゴに置換
+$out_html =~ s/バナナ/リンゴ/g;
+</pre>
+
+テキストファイルに含まれるすべてのバナナをリンゴに置換するプログラム「replace_banana_apple.pl」です。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode', 'decode';
+
+# ファイル全部を読み込む
+my $in_html;
+{
+  local $/ = undef;
+  $in_html = <>;
+  $in_html = decode('UTF-8', $in_html);
+}
+
+# ファイルの内容を出力用のHTMLにコピー
+my $out_html = $in_html;
+
+# すべてのバナナをリンゴに置換
+$out_html =~ s/バナナ/リンゴ/g;
+
+print encode('UTF-8', "$out_html\n");
+</pre>
+
+次のようにプログラムを実行します。
+
+<pre>
+perl replace_banana_apple.pl replace_banana_apple_input.html > replace_banana_apple_output.html
+</pre>
+
+出力ファイル「replace_banana_apple_output.html」の中身は以下のようになり、バナナがリンゴに置換されています。
+
+<pre>
+モジガエルは、リンゴを食べています。
+
+リンゴは、まだ青く熟していません。
+
+「早く、リンゴが食べごろにならないかなぁ」
+</pre>
