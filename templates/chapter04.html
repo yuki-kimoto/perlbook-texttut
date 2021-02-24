@@ -437,3 +437,66 @@ perl replace_banana_apple.pl replace_banana_apple_input.html > replace_banana_ap
 
 「早く、リンゴが食べごろにならないかなぁ」
 </pre>
+
+<h3>青リンゴ、赤リンゴ、黄リンゴの数を数える</h3>
+
+次のテキスト「count_apple_color_input.html」に含まれている青リンゴ、赤リンゴ、黄リンゴの数を数えてみましょう。
+
+<pre>
+青リンゴ、赤リンゴ、黄リンゴ、どれが好き。
+
+うーん、赤リンゴが、食べたいなぁ。赤リンゴは、すっかり食べごろ。
+
+青リンゴも、酸味がすっきり、おいしそう。
+</pre>
+
+すべて検索をするには、while構文で、正規表現のgオプションを使います。
+
+青リンゴ、赤リンゴ、黄リンゴの数を数えるプログラム「count_apple_color.pl」です。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode', 'decode';
+
+# ファイル全部を読み込む
+my $html;
+{
+  local $/ = undef;
+  $html = <>;
+  $html = decode('UTF-8', $html);
+}
+
+# リンゴの色の個数を数える
+my %apple_counts;
+while ($html =~ /(青|赤|黄)リンゴ/g) {
+  my $color = $1;
+  
+  # 個数を加算
+  $apple_counts{$color}++;
+}
+
+# リンゴの個数を記述したテキスト
+my $apple_counts_str = '';
+for my $color (sort keys %apple_counts) {
+  my $apple_count = $apple_count{$color};
+  $apple_counts_str .= "${color}リンゴ: ${apple_count}個";
+}
+
+print encode('UTF-8', "$apple_counts_str\n");
+</pre>
+
+次のように実行してみましょう。
+
+<pre>
+perl count_apple_color.pl count_apple_color_input.html > count_apple_color_output.html
+</pre>
+
+出力ファイルには、以下のように出力されます。リンゴの数を数えられていますね。
+
+<pre>
+赤リンゴ: 3個
+青リンゴ: 2個
+黄リンゴ: 1個
+</pre>
