@@ -500,3 +500,67 @@ perl count_apple_color.pl count_apple_color_input.html > count_apple_color_outpu
 青リンゴ: 2個
 黄リンゴ: 1個
 </pre>
+
+<h3>全角数字を半角数字に変換する</h3>
+
+全角数字を半角数字に変換するサンプルです。正規表現ではないのですがtr演算子と呼ばれる、対応する文字を置換する演算子を使うと簡単にできます。
+
+次のテキスト「replace_zenkaku_number_to_hankaku_input.html」に含まれている全角数字を半角数字に変換してみましょう。
+
+<pre>
+モジガエル君。君の好きな果物を５つ書いてください。
+
+1 バナナ
+２ リンゴ
+３ いちご
+４ ぶどう
+5 みかん
+
+あれあれ、全角数字と半角数字が混ざっているじゃないの?
+</pre>
+
+全角数字を半角数字に変換する「replace_zenkaku_number_to_hankaku.pl」です。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode', 'decode';
+
+# ファイル全部を読み込む
+my $in_html;
+{
+  local $/ = undef;
+  $in_html = <>;
+  $in_html = decode('UTF-8', $in_html);
+}
+
+# ファイルの内容を出力用のHTMLにコピー
+my $out_html = $in_html;
+
+# 全角数字を半角数字に置換
+$out_html =~ tr/０-９/0-9/;
+
+print encode('UTF-8', "$out_html\n");
+</pre>
+
+次のように実行してみましょう。
+
+<pre>
+perl replace_zenkaku_number_to_hankaku.pl replace_zenkaku_number_to_hankaku_input.html > replace_zenkaku_number_to_hankaku_output.html
+</pre>
+
+出力ファイルには、以下のように出力されます。全角数字が、半角文字に変換されていますね。
+
+<pre>
+モジガエル君。君の好きな果物を5つ書いてください。
+
+1 バナナ
+2 リンゴ
+3 いちご
+4 ぶどう
+5 みかん
+
+あれあれ、全角数字と半角数字が混ざっているじゃないの?
+
+</pre>
