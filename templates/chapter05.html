@@ -37,7 +37,7 @@ JSONとして表現したものが以下です。項目名は、英語にして�
     "author_name" : "田中太郎",
     "price" : 1900,
     "issued_date" : "2019-03-06"
-  },
+  }
 ]
 </pre>
 
@@ -90,7 +90,7 @@ JSONのデータフォーマットについて、簡単に解説しておきま�
 <pre>
 [
   {"id" : 1, "name" : "モジガエル"},
-  {"id" : 2, "name" : "サーバー太郎"},
+  {"id" : 2, "name" : "サーバー太郎"}
 ]
 </pre>
 
@@ -99,7 +99,7 @@ JSONのデータフォーマットについて、簡単に解説しておきま�
 連想配列は「{」と「}」で囲んで、キーと値のペアを「,」で複数並べます。キーと値は「:」で繋げます。キーは、文字列である必要があります。Perlのハッシュに該当します。
 
 <pre>
-{"id" : 1, "name" : "モジガエル"},
+{"id" : 1, "name" : "モジガエル"}
 </pre>
 
 もう一度、JSONデータ構造を見てみましょう。配列の要素として、連想配列を持っているというところをよく見てみます。
@@ -126,7 +126,7 @@ JSONのデータフォーマットについて、簡単に解説しておきま�
     "author_name" : "田中太郎",
     "price" : 1900,
     "issued_date" : "2019-03-06"
-  },
+  }
 ]
 </pre>
 
@@ -164,3 +164,88 @@ C = {
   }
 </pre>
 
+<h3>JSONデータを読み込んで、データを加工して、出力する</h3>
+
+JSONデータを読み込んで、データを加工して、出力するサンプルコードを書いてみます。
+
+価格のデータに10%の消費税を追加して、保存するという処理にしてみます。
+
+JSONデータを「edit_json_add_price_zei_input.json」という名前で保存します。文字コードはUTF-8にしてください。
+
+<pre>
+[
+  {
+    "id" : 1,
+    "name" : "Perlテキスト処理プログラミング入門",
+    "author_name" : "木本裕紀",
+    "price" : 2900,
+    "issued_date" : "2021-01-03"
+  },
+  {
+    "id" : 2,
+    "name" : "Web開発をやるぜPerl",
+    "author_name" : "木本裕紀",
+    "price" : 2000,
+    "issued_date" : "2021-01-03"
+  },
+  {
+    "id" : 3,
+    "name" : "データベース入門",
+    "author_name" : "田中太郎",
+    "price" : 1900,
+    "issued_date" : "2019-03-06"
+  }
+]
+</pre>
+
+次にJSONを読み込むプログラム「edit_json_add_price_zei.pl」を作成します。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use JSON::PP 'encode_json', 'decode_json';
+
+# ファイル全部を読み込む
+my $in_json;
+{
+  local $/ = undef;
+  $in_json = <>;
+}
+
+# deocde_json関数でJSONデータをPerlの内部文字列を含むデータ構造に変換
+my $books = decode_json $in_json;
+
+for my $book (@$books) {
+  # 書籍の情報を取得
+  my $id = $book->{id};
+  my $name = $book->{name};
+  my $price = $book->{price};
+  my $issued_date = $book->{issued_date};
+  
+  # 税込み価格
+  my $price_zeikomi = $price * 1.1;
+  
+  # 税込み価格で書籍の情報を更新
+  
+  $book->{price} = $price_zeikomi
+}
+
+# encode_json関数でPerlの内部文字列を含むデータ構造をJSONデータに変換
+my $out_json = encode_jcon $books;
+
+# JSONを出力
+print $out_json;
+</pre>
+
+次のように実行してみましょう。
+
+<pre>
+perl edit_json_add_price_zei.pl edit_json_add_price_zei_input.json > edit_json_add_price_zei_output.json
+</pre>
+
+出力結果です。出力データには、空白文字と改行が含まれていないので、見づらいですが、価格が税込み価格に更新されているのを確認できます。
+
+<pre>
+[{"name":"Perlテキスト処理プログラミング入門","author_name":"木本裕紀","price":3190,"issued_date":"2021-01-03","id":1},{"id":2,"issued_date":"2021-01-03","name":"Web開発をやるぜPerl","author_name":"木本裕紀","price":2200},{"id":3,"issued_date":"2019-03-06","author_name":"田中太郎","name":"データベース入門","price":2090}]
+</pre>
