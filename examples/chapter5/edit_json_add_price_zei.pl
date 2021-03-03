@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+
+# JSON::PPを読み込み、encode_json関数とdecode_json関数をインポートする
 use JSON::PP 'encode_json', 'decode_json';
 
 # ファイル全部を読み込む

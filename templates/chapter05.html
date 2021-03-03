@@ -1,3 +1,29 @@
+<style>
+  h2 {
+    counter-increment:count1;
+    counter-reset:count2;
+  }
+  h2:before {
+    content:"5." counter(count1) " ";
+  }
+
+  h3 {
+    counter-increment:count2;
+  }
+  h3:before {
+    content:"5." counter(count1) "." counter(count2) " ";
+  }
+</style>
+
+<div class="chapter">
+<div class="chapter_description">
+  <div class="chapter_description_left">
+    <img width="100" src="https://cdn-ak.f.st-hatena.com/images/fotolife/p/perlcodesample/20180820/20180820075726.png">  </div>
+  <div class="chapter_description_right">
+    HTMLをサンプルに正規表現の検索・置換を実践してみましょう。
+  </div>
+</div>
+
 <h2>JSONデータを入出力するサンプル</h2>
 
 JSONデータを入出力するサンプルプログラムを書いてみます。JSONは、多次元データ構造を表現できるWebで使われるデファクトスタンダードなデータ形式です。
@@ -204,6 +230,8 @@ JSONデータを「edit_json_add_price_zei_input.json」という名前で保存
 use strict;
 use warnings;
 use utf8;
+
+# JSON::PPを読み込み、encode_json関数とdecode_json関数をインポートする
 use JSON::PP 'encode_json', 'decode_json';
 
 # ファイル全部を読み込む
@@ -232,7 +260,7 @@ for my $book (@$books) {
 }
 
 # encode_json関数でPerlの内部文字列を含むデータ構造をJSONデータに変換
-my $out_json = encode_jcon $books;
+my $out_json = encode_json $books;
 
 # JSONを出力
 print $out_json;
@@ -249,3 +277,78 @@ perl edit_json_add_price_zei.pl edit_json_add_price_zei_input.json > edit_json_a
 <pre>
 [{"name":"Perlテキスト処理プログラミング入門","author_name":"木本裕紀","price":3190,"issued_date":"2021-01-03","id":1},{"id":2,"issued_date":"2021-01-03","name":"Web開発をやるぜPerl","author_name":"木本裕紀","price":2200},{"id":3,"issued_date":"2019-03-06","author_name":"田中太郎","name":"データベース入門","price":2090}]
 </pre>
+
+<h2>JSONを読み込むソースコードの解説</h2>
+
+JSONを読み込むソースコードを解説していきます。
+
+<h3>JSON::PPモジュールの読み込みと関数のインポート</h3>
+
+まず、JSONデータを扱うために、JSON::PPモジュールを読み込む必要があります。JSON::PPモジュールは、Perlのコアモジュールです。Perl 5.14からコアモジュールになりました。
+
+モジュールとは、特定の機能をまとめたものと考えてください。use文を使って、モジュールを読み込むことができます。
+
+<pre>
+# JSON::PPを読み込み、encode_json関数とdecode_json関数をインポートする
+use JSON::PP 'encode_json', 'decode_json';
+</pre>
+
+モジュールの読み込むときに、必要な関数のインポートも同時に行っています。関数のインポートを行うと、その関数が使えるようになります。
+
+Perlのデータ構造からJSONデータを生成するためにencode_json関数をインポートしています。
+
+JSONデータをPerlのデータ構造にするためにdecode_json関数をインポートしています。
+
+<h3>JSONデータをファイルから読み込みPerlのデータ構造に変換する</h3>
+
+次に、JSONデータをファイルから読み込みPerlのデータ構造に変換します。
+
+<pre>
+# ファイル全部を読み込む
+my $in_json;
+{
+  local $/ = undef;
+  $in_json = <>;
+}
+</pre>
+
+ファイルの読み込みは、以前に解説したものと同じです。一つ注意してほしいのはEncodeモジュールのdecode関数で、読み込んだデータをPerlの内部文字列に変換していないところです。これは、decode_json関数が、JSONデータをPerlの内部文字列を含むデータ構造に変換してくれるので、書く必要がないためです。
+
+次に、deocde_json関数でJSONデータをPerlの内部文字列を含むデータ構造に変換します。
+
+<pre>
+# deocde_json関数でJSONデータをPerlの内部文字列を含むデータ構造に変換
+my $books = decode_json $in_json;
+</pre>
+
+$booksは、以下のようなPerlのデータ構造になっています。
+
+<pre>
+[
+  {
+    "id" => 1,
+    "name" => "Perlテキスト処理プログラミング入門",
+    "author_name" => "木本裕紀",
+    "price" => 2900,
+    "issued_date" => "2021-01-03"
+  },
+  {
+    "id" => 2,
+    "name" => "Web開発をやるぜPerl",
+    "author_name" => "木本裕紀",
+    "price" => 2000,
+    "issued_date" => "2021-01-03"
+  },
+  {
+    "id" => 3,
+    "name" => "データベース入門",
+    "author_name" => "田中太郎",
+    "price" => 1900,
+    "issued_date" => "2019-03-06"
+  }
+]
+</pre>
+
+Perlでは、これを理解するのが少し大変です。これは、ハッシュの配列と呼ばれるデータ構造ですが、Perlでは、多次元データ構造を作成するためには、リファレンスと呼ばれる機能を理解する必要があります。少し回り道をして、リファレンスについて詳しく解説します。
+
+</div>
