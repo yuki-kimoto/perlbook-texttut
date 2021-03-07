@@ -376,7 +376,13 @@ my $name_ref = \$name;
 print "$name_ref\n";
 </pre>
 
-出力結果です。
+実行してみましょう。
+
+<pre>
+perl create_scalar_ref.pl
+</pre>
+
+自分の実行環境での出力結果です。
 
 <pre>
 SCALAR(0x55beb1acea08)
@@ -393,5 +399,94 @@ $name_ref -> $name
 
 「$name」は一つの値を表すスカラ変数ですので、このようなリファレンスをスカラリファレンスと呼びます。
 
+<h3>配列リファレンスの作成</h3>
 
-</div>
+配列のリファレンスも「\」を使って同じように作成できます。
+
+<pre>
+# リファレンスを作成
+my $nums_ref = \@nums;
+</pre>
+
+リファレンスは、実際のデータの指す矢印のようなものです。「$nums_ref」は「@nums」という配列の実態を指しています。
+
+<pre>
+# リファレンスのイメージ
+$nums_ref -> @nums
+</pre>
+
+配列のリファレンスを作成するサンプル「create_array_ref.pl」です。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+
+# 実際のデータ
+my @nums = (3, 5, 9);
+
+# 配列リファレンスを作成
+my $nums_ref = \@nums;
+
+# 中身を表示してみるとどうなる?
+print "$nums_ref\n";
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl create_array_ref.pl
+</pre>
+
+自分の実行環境での出力結果です。
+
+<pre>
+ARRAY(0x560d5ff19a08)
+</pre>
+
+<h3>配列リファレンスを簡単に作成する</h3>
+
+配列リファレンスは、無名配列生成子「[]」と呼ばれる文法を使って、簡単に作成できます。
+
+<pre>
+# 無名配列生成子を使って配列リファレンスを簡単に作成。
+my $nums_ref = [3, 5, 9];
+</pre>
+
+これは、以下の記述と同じになります。配列を作成している部分が省略できてきますね。
+
+<pre>
+# 実際のデータ
+my @nums = (3, 5, 9);
+
+# 配列リファレンスを作成
+my $nums_ref = \@nums;
+</pre>
+
+Perlでは「()」と「[]」を区別して読めるようになることが、大切です。
+
+無名配列生成子を使って、配列リファレンスを簡単に作成するサンプル「create_array_ref_simple.pl」です。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+
+# 無名配列生成子を使って配列リファレンスを簡単に作成
+my $nums_ref = [3, 5, 9];
+
+# 中身を表示してみるとどうなる?
+print "$nums_ref\n";
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl create_array_ref_simple.pl
+</pre>
+
+自分の実行環境での出力結果です。
+
+<pre>
+ARRAY(0x55e35929b398)
+</pre>
