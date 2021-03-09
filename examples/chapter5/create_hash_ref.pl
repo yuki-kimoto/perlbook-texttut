@@ -1,9 +1,8 @@
 use strict;
 use warnings;
-use utf8;
 
 # 実際のデータ
-my %book = (id => 1, name => 'Perlテキスト処理');
+my %book = (id => 1, name => 'Perl Book');
 
 # ハッシュリファレンスを作成
 my $book_ref = \%book;

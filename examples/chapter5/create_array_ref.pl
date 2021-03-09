@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use utf8;
 
 # 実際のデータ
 my @nums = (3, 5, 9);

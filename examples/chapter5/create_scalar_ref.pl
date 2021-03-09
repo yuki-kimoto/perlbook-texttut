@@ -1,9 +1,8 @@
 use strict;
 use warnings;
-use utf8;
 
 # 実際のデータ
-my $name = "モジガエル";
+my $name = "kimoto";
 
 # リファレンスを作成
 my $name_ref = \$name;
