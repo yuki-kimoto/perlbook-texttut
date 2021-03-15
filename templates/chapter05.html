@@ -1017,3 +1017,122 @@ $VAR1 = {
           'id' => 1
         };
 </pre>
+
+<h3>日本語のデータをダンプする</h3>
+
+日本語のデータをダンプするには、どうすればよいのでしょうか? 実は、Perlには、日本語のデータを簡単にダンプする機能が標準関数や標準モジュールとして含まれていません。
+
+これでは少し不便ですね。こういう場合は、その機能を実現するPerlのモジュールをCPANというサイトからダウンロードしてインストールできます。
+
+CPANからダウンロードするコマンドは「cpanm」あるいは「cpan」です。cpanmがある場合は、cpanmでインストールするのがお勧めです。
+
+ここでは、日本語のデータをダンプできる「D」モジュールをインストールしてみましょう。
+
+<pre>
+# cpanmの場合
+cpanm D
+
+# cpanの場合
+cpan D
+</pre>
+
+Dモジュールのインストールが終わったら次のように、日本語データをダンプしてみましょう。
+
+<h4>Windowsで日本語を含むデータをダンプする</h4>
+
+Windowsの場合は「use D;」でモジュールを読み込んだ後に、「dw」というコマンドでダンプできます。Perlの内部文字列を、cp932でエンコードして出力します。文字コードはUTF-8で保存してください。
+
+プログラム名は「dump_data_win.pl」です。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+
+# ハッシュのリファレンス
+my $book = {id => 1, name => 'モジガエルのPerl入門'};
+
+# Windowsで日本語を含んだPerlのデータをダンプする
+use D;dw $book;
+</pre>
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+
+# ハッシュのリファレンス
+my $book = {id => 1, name => 'モジガエルのPerl入門'};
+
+# Windowsで日本語を含んだPerlのデータをダンプする
+use D;dw $book;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl dump_data_win.pl
+</pre>
+
+次のように日本語が正しくダンプされました。
+
+<pre>
+{
+  'id' => '1',
+  'name' => 'モジガエルのPerl入門'
+} at dump_data_win.pl line 9.
+</pre>
+
+<h4>Mac、Linux/UNIXで日本語を含むデータをダンプする</h4>
+
+Mac、Linux/UNIXの場合は「use D;」でモジュールを読み込んだ後に、「du」というコマンドでダンプできます。Perlの内部文字列を、cp932でエンコードして出力します。文字コードはUTF-8で保存してください。
+
+プログラム名は「dump_data_unix.pl」です。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+
+# ハッシュのリファレンス
+my $book = {id => 1, name => 'モジガエルのPerl入門'};
+
+# Mac、Linux/UNIXで日本語を含んだPerlのデータをダンプする
+use D;du $book;
+</pre>
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+
+# ハッシュのリファレンス
+my $book = {id => 1, name => 'モジガエルのPerl入門'};
+
+# Mac、Linux/UNIXで日本語を含んだPerlのデータをダンプする
+use D;du $book;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl dump_data_unix.pl
+</pre>
+
+次のように日本語が正しくダンプされました。
+
+<pre>
+{
+  'id' => '1',
+  'name' => 'モジガエルのPerl入門'
+} at dump_data_unix.pl line 9.
+</pre>
+
+<h2>ハッシュの配列というデータ構造をPerlで表現する</h2>
+
+ハッシュの配列というデータ構造をPerlで表現してみましょう。ついに、ここに戻ってきました!
+
+Perlでは、多次元データ構造は、リファレンスを使って表現します。
+
+ハッシュの配列を作成してダンプする「dump_hash_array.pl」です。
+
