@@ -853,3 +853,167 @@ Perl Book
 id : 2
 name : Perl Book
 </pre>
+
+<h2>データをダンプする</h2>
+
+Perlのデータをダンプする方法について書きます。ダンプとは、この文脈では、データの中身を文字列に変換して表示することです。
+
+配列のデータ、配列のリファレンスのデータ、ハッシュのデータ、ハッシュのリファレンスのデータをData::DumperというPerlのモジュールを使ってダンプしてみましょう。
+
+<h3>配列をダンプする</h3>
+
+配列をダンプしてみましょう。Data::Dumperモジュールを読み込み、Dumper関数を使います。
+
+Dumper関数の引数は、リファレンスを渡すのがお勧めな方法なので「\」を使って、配列のリファレンスを作成しています。
+
+Dumper関数は、文字列化されたデータの情報を返すので、warn関数を使って、標準エラー出力に、出力しています。
+
+配列の情報をダンプする「dump_array.pl」です。
+
+<pre>
+use strict;
+use warnings;
+
+# Data::Dumperモジュールを読み込み
+use Data::Dumper;
+
+# 配列
+my @nums = (3, 5, 6);
+
+# 配列のデータをダンプする
+warn Dumper \@nums;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl dump_array.pl
+</pre>
+
+配列の内容が出力されます。
+
+<pre>
+$VAR1 = [
+          3,
+          5,
+          6
+        ];
+</pre>
+
+<h3>配列のリファレンスをダンプする</h3>
+
+配列のリファレンスをダンプしてみましょう。Data::Dumperモジュールを読み込み、Dumper関数を使います。
+
+Dumper関数の引数は、配列のリファレンスを渡します。
+
+Dumper関数は、文字列化されたデータの情報を返すので、warn関数を使って、標準エラー出力に、出力しています。
+
+配列のリファレンスの情報をダンプする「dump_array_ref.pl」です。
+
+<pre>
+use strict;
+use warnings;
+
+# Data::Dumperモジュールを読み込み
+use Data::Dumper;
+
+# 配列のリファレンス
+my $nums = [3, 5, 6];
+
+# 配列のリファレンスのデータをダンプする
+warn Dumper $nums;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl dump_array_ref.pl
+</pre>
+
+配列のリファレンスの内容が出力されます。
+
+<pre>
+$VAR1 = [
+          3,
+          5,
+          6
+        ];
+</pre>
+
+<h3>ハッシュをダンプする</h3>
+
+ハッシュをダンプしてみましょう。Data::Dumperモジュールを読み込み、Dumper関数を使います。
+
+Dumper関数の引数は、リファレンスを渡すのがお勧めな方法なので「\」を使って、ハッシュのリファレンスを作成しています。
+
+Dumper関数は、文字列化されたデータの情報を返すので、warn関数を使って、標準エラー出力に、出力しています。
+
+ハッシュの情報をダンプする「dump_hash.pl」です。
+
+<pre>
+use strict;
+use warnings;
+
+# Data::Dumperモジュールを読み込み
+use Data::Dumper;
+
+# ハッシュ
+my %book = (id => 1, name => 'Perl Book');
+
+# ハッシュのデータをダンプする
+warn Dumper \%book;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl dump_hash.pl
+</pre>
+
+ハッシュの内容が出力されます。
+
+<pre>
+$VAR1 = {
+          'name' => 'Perl Book',
+          'id' => 1
+        };
+</pre>
+
+<h3>ハッシュのリファレンスをダンプする</h3>
+
+ハッシュのリファレンスをダンプしてみましょう。Data::Dumperモジュールを読み込み、Dumper関数を使います。
+
+Dumper関数の引数は、リファレンスを渡すのがお勧めな方法なので「\」を使って、ハッシュのリファレンスのリファレンスを作成しています。
+
+Dumper関数は、文字列化されたデータの情報を返すので、warn関数を使って、標準エラー出力に、出力しています。
+
+ハッシュのリファレンスの情報をダンプする「dump_hash_ref.pl」です。
+
+<pre>
+use strict;
+use warnings;
+
+# Data::Dumperモジュールを読み込み
+use Data::Dumper;
+
+# ハッシュのリファレンス
+my $book = {id => 1, name => 'Perl Book'};
+
+# ハッシュのリファレンスのデータをダンプする
+warn Dumper $book;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl dump_hash_ref.pl
+</pre>
+
+ハッシュのリファレンスの内容が出力されます。
+
+<pre>
+$VAR1 = {
+          'name' => 'Perl Book',
+          'id' => 1
+        };
+</pre>
