@@ -1132,7 +1132,143 @@ perl dump_data_unix.pl
 
 ハッシュの配列というデータ構造をPerlで表現してみましょう。ついに、ここに戻ってきました!
 
+<h3>ハッシュの配列というデータ構造の作成</h3>
+
 Perlでは、多次元データ構造は、リファレンスを使って表現します。
 
-ハッシュの配列を作成してダンプする「dump_hash_array.pl」です。
+ハッシュの配列を作成してダンプするサンプルコード「dump_array_of_hash.pl」を書いてみます。
 
+<pre>
+use strict;
+use warnings;
+use Data::Dumper;
+
+# Perlでハッシュの配列というデータ構造を表現
+# 配列のリファレンスとハッシュのリファレンスを使います。
+my $books = [
+  {
+    id => 1,
+    name => 'Perl Boook',
+    price => 2900,
+  },
+  {
+    id => 2,
+    name => 'Web Development',
+    price => 2000,
+  },
+  {
+    id => 3,
+    name => 'Database',
+    price => 1900,
+  }
+];
+
+warn Dumper $books;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl dump_array_of_hash.pl
+</pre>
+
+出力結果です。ハッシュの配列がダンプされます。
+
+<pre>
+$VAR1 = [
+          {
+            'id' => 1,
+            'name' => 'Perl Boook',
+            'price' => 2900
+          },
+          {
+            'name' => 'Web Development',
+            'id' => 2,
+            'price' => 2000
+          },
+          {
+            'name' => 'Database',
+            'id' => 3,
+            'price' => 1900
+          }
+        ];
+</pre>
+
+<h3>ハッシュの配列をループする</h3>
+
+ハッシュの配列をループしてみます。書籍の価格に消費税10%を追加してみましょう。この部分の処理は、JSONでデータを読み込んだ場合の処理と全く同じです。
+
+ハッシュの配列をループする場合は、扱っているデータがリファレンスであることに注意します。
+
+forループに渡すときは、配列のリファレンスをデリファレンスして配列にします。
+
+ハッシュのリファレンスから値にアクセスする場合は、アロー演算子「->」を使います。
+
+ハッシュの配列をループする「loop_array_of_hash.pl」です。
+
+<pre>
+use strict;
+use warnings;
+use Data::Dumper;
+
+# 書籍のデータ
+my $books = [
+  {
+    id => 1,
+    name => 'Perl Boook',
+    price => 2900,
+  },
+  {
+    id => 2,
+    name => 'Web Development',
+    price => 2000,
+  },
+  {
+    id => 3,
+    name => 'Database',
+    price => 1900,
+  }
+];
+
+# 配列のリファレンスをデリファレンスしてforループに渡す
+for my $book (@$books) {
+  # アロー演算子「->」で値を取得
+  my $id = $book->{id};
+  my $name = $book->{name};
+  my $price = $book->{price};
+  
+  # 消費税10%を加算
+  $book->{price} *= 1.1;
+}
+
+# データをダンプする
+warn Dumper $books;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl loop_array_of_hash.pl
+</pre>
+
+出力結果です。消費税10%が加算されていますね。
+
+<pre>
+$VAR1 = [
+          {
+            'name' => 'Perl Boook',
+            'price' => '3190',
+            'id' => 1
+          },
+          {
+            'name' => 'Web Development',
+            'price' => '2200',
+            'id' => 2
+          },
+          {
+            'id' => 3,
+            'price' => '2090',
+            'name' => 'Database'
+          }
+        ];
+</pre>
