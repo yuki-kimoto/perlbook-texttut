@@ -351,6 +351,36 @@ $booksは、以下のようなPerlのデータ構造になっています。
 
 Perlでは、これを理解するのが少し大変です。これは、ハッシュの配列と呼ばれるデータ構造ですが、Perlでは、多次元データ構造を表現するためには、リファレンスと呼ばれる機能を使う必要があります。少し回り道をして、リファレンスについて詳しく解説します。
 
+<h3>Perlのデータ構造をJSONデータに変換する</h3>
+
+リファレンス解説の前にJSONの出力の部分だけ解説しておきますね。
+
+Perlのデータ構造をJSONデータに変換するにはJSON::PPモジュールのencode_json関数を使用します。
+
+<pre>
+# encode_json関数でPerlの内部文字列を含むデータ構造をJSONデータに変換
+my $out_json = encode_json $books;
+</pre>
+
+print文で出力して、リダイレクトを使ってファイルに書き込みます。
+
+<pre>
+# JSONを出力
+print $out_json;
+</pre>
+
+リダイレクトを使って、ファイルに書き込み。
+
+<pre>
+perl edit_json_add_price_zei.pl edit_json_add_price_zei_input.json > edit_json_add_price_zei_output.json
+</pre>
+
+出力されたファイルの内容は、消費税が10%加算されたJSONデータです。
+
+<pre>
+[{"name":"Perlテキスト処理プログラミング入門","author_name":"木本裕紀","price":3190,"issued_date":"2021-01-03","id":1},{"id":2,"issued_date":"2021-01-03","name":"Web開発をやるぜPerl","author_name":"木本裕紀","price":2200},{"id":3,"issued_date":"2019-03-06","author_name":"田中太郎","name":"データベース入門","price":2090}]
+</pre>
+
 <h2>リファレンスの作成</h2>
 
 リファレンスについて解説していきます。ここからは、しばらく、日本語の扱いについては、忘れてください。データ構造の出力を簡単に見るために、日本語については、いったんおいておき、Perlでひと手間かかる部分を、最後に解説します。
