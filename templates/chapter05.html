@@ -1357,7 +1357,89 @@ ID,書名,著者名,価格,発売日
 答え合わせです。書籍のCSVファイルを処理してJSONに変換する「csv_to_json.pl」です。上手に書けたかな。
 
 <pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode', 'decode';
+use JSON::PP 'encode_json', 'decode_json';
 
+# CSVファイルを読み込んでPerlのデータ構造を作成する
+my $books = [];
+while (my $line = <>) {
+  # 1行目のヘッダを飛ばす $.は行番号
+  if ($. == 1) {
+    next;
+  }
+  
+  # 改行の削除(Windows, Mac, Linux/UNIX対応)
+  $line =~ s/\r?\n//;
+  
+  # Perlの内部文字列へ変換
+  $line = decode('UTF-8', $line);
+
+  # CSVデータをPerlの変数へ
+  my ($id, $name, $author_name, $price, $issued_date)
+    = split(/,/, $line);
+  
+  # 価格を20% off
+  my $price_off = $price * 0.8;
+  
+  # 発行日の日付を
+  #「2021年1年3日」のようなフォーマットから「2021-01-03」のようなフォーマットへ
+  my $issued_date_hyphen;
+  if ($issued_date =~ /^(\d+)年(\d+)月(\d+)日$/) {
+    my $year = $1;
+    my $mon = $2;
+    my $mday = $3;
+    
+    $issued_date_hyphen = sprintf("%04d-%02d-%02d", $year, $mon, $mday);
+  }
+  else {
+    # フォーマットが間違っている場合は、警告を出して、次の処理へ
+    # $. には行番号が含まれている
+    warn("Invalid issued date format at line $.");
+    next;
+  }
+  
+  # 条件にマッチしたときだけ追加
+  # 検索条件は「書名が『モジガエル』で始まる、あるいは『Webシステム開発』で終わる」
+  # かつ「発売日が2020年以降」
+  my $match;
+  if (
+    ($name =~ /^モジガエル/ || $name =~ /Webシステム開発$/)
+    && $issued_date_hyphen ge '2020'
+  ) {
+    # マッチ
+    $match = 1;
+  }
+  
+  # マッチした場合は追加
+  if ($match) {
+    # 書籍情報を作成
+    my $book = {
+      id => $id,
+      name => $name,
+      author_name => $author_name,
+      price => $price_off,
+      issued_date => $issued_date_hyphen,
+    };
+    
+    # 書籍を配列のリファレンスの最後の要素に追加
+    push @$books, $book;
+  }
+}
+
+# データの中身をダンプしてみたい場合
+# Windows
+# use D;dw $books;
+# Mac, Linux/UNIX
+# use D;du $books;
+
+# Perlのデータ構造をJSONデータへ変換
+my $books_json = encode_json $books;
+
+# JSONデータを出力
+print $books_json;
 </pre>
 
 次のように実行してください。
@@ -1373,3 +1455,53 @@ perl csv_to_json.pl csv_to_json_in.csv > csv_to_json_out.json
 </pre>
 
 お疲れさまでした。
+
+<h2>今後の目標</h2>
+
+テキスト処理プログラミングでプログラミングの基礎を終えた後にチャレンジできる分野について書いておきます。
+
+<h3>Perl標準関数</h3>
+
+Perlでよく使う標準関数を覚えると、よりたくさんのことができるようになります。
+
+<h3>Perl標準モジュール</h3>
+
+Perlでよく使う標準モジュールを覚えると、よりたくさんのことができるようになります。
+
+<h3>CPANモジュール</h3>
+
+CPANは、有志で作られた無料で使えるPerlのモジュールが公開されているサイトです。必要な機能があれば、CPANのPerlモジュールがないかを調べてみましょう。
+
+<h3>Linux/UNIXサーバー管理</h3>
+
+PerlはUNIX上で誕生したプログラミング言語で、UNIXやその派生であるLinux上でのサーバー管理に適したプログラミング言語です。ですので、WindowsやMacでPerlを試した後に、Linux/UNIX上でPerlを使うことにチャレンジするのもよいでしょう。
+
+<h3>データベース</h3>
+
+データベースにチャレンジしてみましょう。SQLite,MySQL,MariaDB,PostgreSQLなどのリレーショナルデータベースで、データベースに問い合わせを行うSQL言語について学びましょう。
+
+Perlからデータベースに接続して、データベースを操作することもできます。Perlでデータベースに接続するには、DBIというモジュールを使います。DBIはPerlで各種のデータベースに接続するための共通インターフェースです。DBIはCPANからインストールできます。
+
+<h3>Webシステム開発環境構築</h3>
+
+Webアプリケーションを作りたい場合は、Webシステム開発環境構築の構築にチャレンジできます。Ubuntu、Debian、CentOSと呼ばれるLinuxのディストリビューションの上に、PerlのWebシステム開発環境構築ができます。
+
+perlbrewやplenvというユーザー環境へPerlをインストールするツールを使って、Perlを実行できるようにしましょう。
+
+Windows上でPerlでWebアプリケーション開発を試したい場合は、WSL2という仕組みの上で、Ubuntuを動かすのが簡単です。
+
+本番でWebアプリケーションを公開したい場合は、クラウドサーバーやVPS(バーチャルプライベートサーバー)をレンタルして、その上に、Webシステム開発環境を構築します。
+
+<h3>Webアプリケーション開発</h3>
+
+PerlでWebアプリケーション開発を行ってみましょう。Perlには、Mojolicious,Amon2,Dancer2,Catalystと呼ばれるWebフレームワークやPlack/PSGIと呼ばれるWebアプリの共通インターフェースがあります。
+
+<h2>サンプルコードのダウンロード</h2>
+
+Perlテキスト処理のエッセンスで紹介したサンプルコードは、すべてPerl総合研究所のサイトからダウンロードして試すことができます(もし準備中となっている場合は、しばらくお待ちください)。
+
+<b>Perlテキスト処理のエッセンス サンプルコードのダウンロード</b>
+
+http://www.perlri.com/book_perl_text_essence_examples
+
+このページで会員登録を行うと、サンプルがすべてダウンロードできます。
