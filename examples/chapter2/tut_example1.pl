@@ -29,7 +29,12 @@ while (my $line = <>) {
     $book{name} =~ s/入門/基礎/;
     
     # 出力するための配列を作成
-    my @output_items = ($book{id}, $book{name}, $book{author}, $book{price});
+    my @output_items = (
+      $book{id},
+      $book{name},
+      $book{author},
+      $book{price}
+    );
     
     # 出力行を作成
     my $output_line = join(',', @output_items);
