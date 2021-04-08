@@ -689,7 +689,7 @@ $book{price} = 2000;
 
 慣習としては、シングルクォートやダブルクォートで囲まない記法が、多く利用されています。
 
-<h2>条件分岐 - if文</h2>
+<h2>if文を使った条件分岐</h2>
 
 条件を指定して、実行する処理を切り替えることを、条件分岐といいます。条件分岐はif文を使って行うことができます。
 
@@ -897,121 +897,13 @@ if ($book_name =~ /Perl/) {
 
 「=~」はパターンマッチ演算子と呼ばれ、正規表現にマッチした場合に真になります。
 
-<h3>著者名に木本を含んでいたら</h3>
-
-著者名に木本を含んでいたら。「これは木本の著作です」と出力するif文を使ったサンプルです。
-
-Perlで日本語を扱う場合は、いくつか知っておかなければならい知識があるのですが、まずは、サンプルが実行できること優先しましょう。
-
-<h4>Windowsの場合のサンプル</h4>
-
-Windowsの場合のサンプル「contain_jp_string_win.pl」です。ソースコードは、UTF-8で保存します。
-
-<pre>
-use strict;
-use warnings;
-use utf8;
-use Encode 'encode';
-
-# 著者の名前に木本を含んでいたら「これは木本の著作です。」と画面に出力
-my $author_name = '木本裕紀';
-
-if ($author_name =~ /木本/) {
-  my $message = "これは木本の著作です";
-  print encode('cp932', $message) . "\n";
-}
-</pre>
-
-実行してみましょう。
-
-<pre>
-perl contain_jp_string_win.pl
-</pre>
-
-出力結果です。
-
-<pre>
-これは木本の著作です
-</pre>
-
-<h4>Linux/Unix/Macの場合のサンプル</h4>
-
-Linux/Unix/Macの場合のサンプル「contain_jp_string_unix.pl」です。ソースコードは、UTF-8で保存します。
-
-<pre>
-use strict;
-use warnings;
-use utf8;
-use Encode 'encode';
-
-# 著者の名前に木本を含んでいたら「これは木本の著作です。」と画面に出力
-my $author_name = '木本裕紀';
-
-if ($author_name =~ /木本/) {
-  my $message = "これは木本の著作です";
-  print encode('UTF-8', $message) . "\n";
-}
-</pre>
-
-<pre>
-perl contain_jp_string_unix.pl
-</pre>
-
-出力結果です。
-
-<pre>
-これは木本の著作です
-</pre>
-
-<h4>ソースコードをUTF-8で保存する</h4>
-
-Perlで正しく日本語を扱う場合は、ソースコードをUTF-8で保存する必要があります。UTF-8というのは、ユニコードの符号化方式のひとつです。
-
-Windowsのメモ帳の場合は、名前を付けて保存を行うダイアログで「文字コード」を選択できるので「UTF-8」を選択します。他のエディタを使っている場合も、名前を付けて保存のダイアログの下の方に「文字コード」の選択があるので、「UTF-8」を選択します。
-
-<h4>use utf8;</h4>
-
-「use utf8;」という行をソースコードに含めます。これは、ソースコードがUTF-8で書かれているという意味であり、Perlが日本語を適切に内部的な文字列で扱うようになります。
-
-<pre>
-# ソースコードがUTF-8で書かれていることを教える
-use utf8;
-</pre>
-
-<h4>Encodeモジュール</h4>
-
-「use Encode 'encode';」でencode関数をインポートします。インポートとは、関数をそのソースコード内で利用できるようにするという意味です。encode関数は、画面に出力するときにPerlの内部的な文字列を、OSの文字コードに変換するために使用します。
-
-<pre>
-# OSの文字コードにエンコードするためのencode関数をインポート
-use Encode 'encode';
-</pre>
-
-文字列を画面に出力する場合は、encode関数で、Perlの内部的な文字列を、OSの文字コードに変換します。
-
-Windowsの文字コードは「cp932」です。「cp932」は「Shift_JIS」を少し拡張した文字コードです。
-
-Unix/Linux/Macの場合は「UTF-8」です。これはOSの設定で変更できますが、UTF-8であることが大半であると思うので、UTF-8を想定しています。
-
-<pre>
-# Windowsの場合
-my $message = "これは木本の著作です";
-print encode('cp932', $message) . "\n";
-
-# Linux/UNIX/Macの場合
-my $message = "これは木本の著作です";
-print encode('UTF-8', $message) . "\n";
-</pre>
-
-このようにPerlでは、プログラムの中ではPerlの内部的な文字列で扱い、外部に出力するときはエンコードするという方法をとります。
-
 <h2>繰り返し</h2>
 
-Perlの繰り返し処理の解説です。
+Perlの繰り返し処理の解説です。Perlでは、繰り返しを行うときに、for文あるいはwhile文を使います。
 
-<h3>for文とwhile文</h3>
+<h3>for文</h3>
 
-Perlでは、繰り返しを行うときに、for文あるいはwhile文を使います。
+for文のサンプルです。
 
 <pre>
 # for文 - C言語風for文
@@ -1026,6 +918,9 @@ for my $i (0 .. 9) {
   print "$i\n";
 }
 
+<h3>while文</h3>
+
+<pre>
 # while文 - イテレーター風for文
 my $i = 0;
 while ($i < 10) {
@@ -1075,10 +970,6 @@ while文の丸かっこ「()」の中には条件を書くことができます�
 今回の場合の「$iが10より小さい」という条件です。
 
 最後の部分に「$i++」とあるのに注目してください。これはインクリメントと呼ばれ「$i」の値が、1加算されます。
-
-<h3>繰り返しの詳細</h3>
-
-繰り返しについては、繰り返し処理の章で詳しく解説します。
 
 <h2>Perl標準関数</h2>
 
@@ -1224,6 +1115,70 @@ Perlの日本語処理に対する混乱は、encode関数とdecode関数が、�
 
 Perl 5.8以降の新しい文字列の扱いは、実際の文字コードを、Perlの内部的な文字列に変換するという仕組みであることを、しっかりと覚えておいてください。
 
+<h3>日本語を出力するサンプル</h3>
+
+著者名に木本を含んでいたら。「これは木本の著作です」と出力するサンプルです。日本語、正規表現、if文を使っています。
+
+<h4>Windowsの場合のサンプル</h4>
+
+Windowsの場合のサンプル「contain_jp_string_win.pl」です。ソースコードは、UTF-8で保存します。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode';
+
+# 著者の名前に木本を含んでいたら「これは木本の著作です。」と画面に出力
+my $author_name = '木本裕紀';
+
+if ($author_name =~ /木本/) {
+  my $message = "これは木本の著作です";
+  print encode('cp932', $message) . "\n";
+}
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl contain_jp_string_win.pl
+</pre>
+
+出力結果です。
+
+<pre>
+これは木本の著作です
+</pre>
+
+<h4>Linux/Unix/Macの場合のサンプル</h4>
+
+Linux/Unix/Macの場合のサンプル「contain_jp_string_unix.pl」です。ソースコードは、UTF-8で保存します。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode';
+
+# 著者の名前に木本を含んでいたら「これは木本の著作です。」と画面に出力
+my $author_name = '木本裕紀';
+
+if ($author_name =~ /木本/) {
+  my $message = "これは木本の著作です";
+  print encode('UTF-8', $message) . "\n";
+}
+</pre>
+
+<pre>
+perl contain_jp_string_unix.pl
+</pre>
+
+出力結果です。
+
+<pre>
+これは木本の著作です
+</pre>
+
 <h2>ファイル入出力</h2>
 
 ファイル入出力の最も簡単な方法を紹介します。
@@ -1261,8 +1216,8 @@ perl tut_example1.pl tut_input.csv
 
 ダイヤモンド演算子を使うと「tut_input.csv」のファイルの内容を一行づつ読み込むことができます。
 
-ファイル入出力については、ファイル入出力の章で詳しく解説します。
+<h2>最初のサンプルをもう一度読んでみましょう</h2>
 
-これで最初のサンプルを理解するためのすべての解説が終わりました。
+これで最初のサンプル「tut_example1.pl」を理解するためのすべての解説が終わりました。最初のサンプルのソースコードをもう一度読んでみましょう。この章の内容を理解できていれば、読めるようになっていると思います。
 
-次の章からは、Perlを自由に書けるようになるための、Perlの文法や正規表現などの理解と実践を進めていきましょう。
+次の章では、Perlでテキストを自由に扱えるようになるために、正規表現を使った文字列の検索について解説します。
