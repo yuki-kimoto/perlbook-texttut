@@ -899,28 +899,13 @@ if ($book_name =~ /Perl/) {
 
 <h3>著者名に木本を含んでいたら</h3>
 
-著者名に木本を含んでいたら。「これは木本の著作」と出力するif文を使ったサンプルです。日本語を正しく扱うサンプルになっています。
+著者名に木本を含んでいたら。「これは木本の著作です」と出力するif文を使ったサンプルです。
 
 Perlで日本語を扱う場合は、いくつか知っておかなければならい知識があるのですが、まずは、サンプルが実行できること優先しましょう。
 
-まずは、Unix/Linux/Macの場合のサンプルです。
+<h4>Windowsの場合のサンプル</h4>
 
-<pre>
-use strict;
-use warnings;
-use utf8;
-use Encode 'encode';
-
-# 著者の名前に木本を含んでいたら「これは木本の著作です。」と画面に出力
-my $author_name = '木本裕紀';
-
-if ($author_name =~ /木本/) {
-  my $message = "これは木本の著作です";
-  print encode('UTF-8', $message) . "\n";
-}
-</pre>
-
-次に、Windowsの場合のサンプルです。
+Windowsの場合のサンプル「contain_jp_string_win.pl」です。ソースコードは、UTF-8で保存します。
 
 <pre>
 use strict;
@@ -937,14 +922,63 @@ if ($author_name =~ /木本/) {
 }
 </pre>
 
-一つの注意として、ソースコードはUTF-8で保存する必要があります。UTF-8というのは、ひとつの文字の符号化形式です。メモ帳の場合は、名前を付けて保存を行う場合にUTF-8という項目があります。これは、比較的新しいWindowsの機能なので、Windows 7や8の場合は、UTF-8で保存できるテキストエディタを探しましょう。
+実行してみましょう。
 
-「use utf8;」という行をソースコードに含めます。これは、ソースコードがUTF-8で書かれているという意味であり、Perlが日本語を内部的な文字列として正しく扱うようになります。
+<pre>
+perl contain_jp_string_win.pl
+</pre>
+
+出力結果です。
+
+<pre>
+これは木本の著作です
+</pre>
+
+<h4>Linux/Unix/Macの場合のサンプル</h4>
+
+Linux/Unix/Macの場合のサンプル「contain_jp_string_unix.pl」です。ソースコードは、UTF-8で保存します。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode';
+
+# 著者の名前に木本を含んでいたら「これは木本の著作です。」と画面に出力
+my $author_name = '木本裕紀';
+
+if ($author_name =~ /木本/) {
+  my $message = "これは木本の著作です";
+  print encode('UTF-8', $message) . "\n";
+}
+</pre>
+
+<pre>
+perl contain_jp_string_unix.pl
+</pre>
+
+出力結果です。
+
+<pre>
+これは木本の著作です
+</pre>
+
+<h4>ソースコードをUTF-8で保存する</h4>
+
+Perlで正しく日本語を扱う場合は、ソースコードをUTF-8で保存する必要があります。UTF-8というのは、ユニコードの符号化方式のひとつです。
+
+Windowsのメモ帳の場合は、名前を付けて保存を行うダイアログで「文字コード」を選択できるので「UTF-8」を選択します。他のエディタを使っている場合も、名前を付けて保存のダイアログの下の方に「文字コード」の選択があるので、「UTF-8」を選択します。
+
+<h4>use utf8;</h4>
+
+「use utf8;」という行をソースコードに含めます。これは、ソースコードがUTF-8で書かれているという意味であり、Perlが日本語を適切に内部的な文字列で扱うようになります。
 
 <pre>
 # ソースコードがUTF-8で書かれていることを教える
 use utf8;
 </pre>
+
+<h4>Encodeモジュール</h4>
 
 「use Encode 'encode';」でencode関数をインポートします。インポートとは、関数をそのソースコード内で利用できるようにするという意味です。encode関数は、画面に出力するときにPerlの内部的な文字列を、OSの文字コードに変換するために使用します。
 
@@ -953,9 +987,21 @@ use utf8;
 use Encode 'encode';
 </pre>
 
-Unix/Linux/Macの場合は「UTF-8」です。これはOSの設定で変更できますが、UTF-8であることが大半であると思うので、UTF-8を想定します。
+文字列を画面に出力する場合は、encode関数で、Perlの内部的な文字列を、OSの文字コードに変換します。
 
-Windowsの場合は「cp932」です。これは、Shift_JISと似ています。
+Windowsの文字コードは「cp932」です。「cp932」は「Shift_JIS」を少し拡張した文字コードです。
+
+Unix/Linux/Macの場合は「UTF-8」です。これはOSの設定で変更できますが、UTF-8であることが大半であると思うので、UTF-8を想定しています。
+
+<pre>
+# Windowsの場合
+my $message = "これは木本の著作です";
+print encode('cp932', $message) . "\n";
+
+# Linux/UNIX/Macの場合
+my $message = "これは木本の著作です";
+print encode('UTF-8', $message) . "\n";
+</pre>
 
 このようにPerlでは、プログラムの中ではPerlの内部的な文字列で扱い、外部に出力するときはエンコードするという方法をとります。
 
