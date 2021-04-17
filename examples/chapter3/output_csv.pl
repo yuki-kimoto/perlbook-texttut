@@ -1,4 +1,3 @@
-# raw.pl
 use strict;
 use warnings;
 use utf8;
