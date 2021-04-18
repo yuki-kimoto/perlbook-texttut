@@ -21,7 +21,7 @@
     <img width="65" src="images/kaeru_w_01.png">
   </div>
   <div class="chapter_description_right">
-    HTMLをサンプルに正規表現の検索・置換を実践してみましょう。
+    HTMLをサンプルに正規表現の検索・置換を実践してみるよ。「HTMLのタグの中のここを取り出したい」「URLだけを取り出したい」「空白を取り除きたい」「この文字列をまとめて置換したい」などなど、よく使うテクニックを紹介していくね。
   </div>
 </div>
 
@@ -35,7 +35,7 @@
 <h1>Linuxサーバー管理入門</h1>
 </pre>
 
-正規表現で見出し「h1」のテキストである「UNIX/Linuxサーバー管理入門」を取得してみます。ソースコードはUTF-8で保存してください。
+正規表現で見出し「h1」のテキストである「UNIX/Linuxサーバー管理入門」を取得するプログラム「head_text.pl」です。ソースコードはUTF-8で保存してください。
 
 <pre>
 use strict;
@@ -49,10 +49,39 @@ my $head_text;
 if ($html =~ /<h1>(.+)<\/h1>/) {
   $head_text = $1;
 }
-print encode('UTF-8', "$head_text\n");
+print encode('UTF-8', "$head_text") . "\n";
 </pre>
 
-出力結果です。Windowsの場合はencode関数の「UTF-8」の部分を「cp932」にしてみてください。この後のサンプルも同じです。
+Windowsの場合はencode関数の「UTF-8」の部分を「cp932」にしてみてください(head_text_win.pl)。この後のサンプルも同じです。
+
+<pre>
+use strict;
+use warnings;
+use utf8;
+use Encode 'encode';
+
+my $html = '<h1>Linuxサーバー管理入門</h1>';
+
+my $head_text;
+if ($html =~ /<h1>(.+)<\/h1>/) {
+  $head_text = $1;
+}
+print encode('cp932', "$head_text") . "\n";
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl head_text.pl
+</pre>
+
+または
+
+<pre>
+perl head_text_win.pl
+</pre>
+
+出力結果です。見出しを取り出せています。
 
 <pre>
 Linuxサーバー管理入門
@@ -82,7 +111,7 @@ Linuxサーバー管理入門</h1>まちがえ閉じタグ
 $html =~ /<h1>(.+?)<\/h1>
 </pre>
 
-では、プログラムを書き直してみましょう。
+では、プログラムを書き直してみましょう。最も短い位置でマッチする「head_text_short_match.pl」です。
 
 <pre>
 use strict;
@@ -99,6 +128,12 @@ if ($html =~ /<h1>(.+?)<\/h1>/) {
 print encode('UTF-8', "$head_text\n");
 </pre>
 
+実行してみましょう。
+
+<pre>
+perl head_text_short_match.pl
+</pre>
+
 今度は正しく欲しい部分を取得することができました。
 
 <pre>
@@ -113,9 +148,16 @@ Linuxサーバー管理入門
 今日は<b>プログラミング</b>を学んで充実した一日。今度は<span style="font-size:18px">Webシステム開発構築</span>を行いたいです。
 </pre>
 
-「<b>」「</b>」「<span style="font-size:18px">」「</span>」を取り除くことができる正規表現を考えます。
+以下のようなタグを取り除くことができる正規表現を考えます。
 
-プログラムを書きます。
+<pre>
+<b>
+</b>
+<span style="font-size:18px">
+</span>
+</pre>
+
+正規表現を使って、タグを取り除くプログラム「remove_tag.pl」です。
 
 <pre>
 use strict;
@@ -136,6 +178,12 @@ print encode('UTF-8', "$text\n");
 
 正規表現の解説です。「<」がきて、改行以外のなんでもよい文字が1文字以上で最短マッチ「.+?」、「>」がくる。gオプションは、すべて置換を意味しています。
 
+実行してみましょう。
+
+<pre>
+perl remove_tag.pl
+</pre>
+
 出力結果です。タグが取り除かれています。
 
 <pre>
@@ -147,10 +195,10 @@ print encode('UTF-8', "$text\n");
 前後の空白文字を取り除いてみましょう。目には見えませんが、全角のスペースと半角のスペースが、前後に複数含まれています。
 
 <pre>
-　   Linuxサーバー管理入門　  
+   　Linuxサーバー管理入門　  
 </pre>
 
-「先頭から複数の空白を取り除く」「末尾から複数の空白を取り除く」という正規表現を書きます。
+前後の空白文字を取り除くには、「先頭から複数の空白を取り除く」「末尾から複数の空白を取り除く」という二つの正規表現を書きます。
 
 <pre>
 # 前後の空白文字を取り除く
@@ -158,7 +206,7 @@ $text =~ s/^\s+//;
 $text =~ s/\s+$//;
 </pre>
 
-<b>trim.pl</b>
+前後の空白文字を取り除く「trim.pl」です。
 
 <pre>
 use strict;
@@ -166,7 +214,7 @@ use warnings;
 use utf8;
 use Encode 'encode';
 
-my $text = '　   Linuxサーバー管理入門　  ';
+my $text = '   　Linuxサーバー管理入門　  ';
 
 # 先頭から複数の空白を取り除く
 $text =~ s/^\s+//;
@@ -177,7 +225,13 @@ $text =~ s/\s+$//;
 print encode('UTF-8', "$text\n");
 </pre>
 
-出力結果です。
+実行してみましょう。
+
+<pre>
+perl trim.pl
+</pre>
+
+出力結果です。前後の空白が取り除けています。
 
 <pre>
 Linuxサーバー管理入門
@@ -187,7 +241,7 @@ Linuxサーバー管理入門
 
 もしASCIIコードで空白とみなされる空白だけを意味したいのであれば、次のように書きます。特殊な文字クラスである「\p{PosixSpace}」を使って表現できます。
 
-<b>trim_ascii.pl</b>
+ASCIIコードの空白だけを取り除く「trim_ascii.pl」です。
 
 <pre>
 # 先頭から複数の空白を取り除く
@@ -197,7 +251,19 @@ $text =~ s/^\p{PosixSpace}+//;
 $text =~ s/\p{PosixSpace}$//;
 </pre>
 
-Perl 5.14以降であれば、ASCIIコードのみを意味する「a」オプションを使って以下のように簡単に書けます。
+実行してみましょう。
+
+<pre>
+perl trim_ascii.pl
+</pre>
+
+出力結果です。ASCIIの空白だけが取り除けています。全角の空白は残っています。
+
+<pre>
+　Linuxサーバー管理入門
+</pre>
+
+Perl 5.14以降であれば「\s」にASCIIコードの空白のみを意味させる「a」オプションを使って以下のように簡単に書けます。サンプルは「trim_ascii_simple.pl」です。
 
 <pre>
 # 先頭から複数の空白を取り除く
@@ -205,6 +271,18 @@ $text =~ s/^\s+//a;
 
 # 末尾から複数の空白を取り除く
 $text =~ s/\s+$//a;
+</pre>
+
+実行してみましょう。
+
+<pre>
+perl trim_ascii_simple.pl
+</pre>
+
+出力結果です。ASCIIの空白だけが取り除けています。全角の空白は残っています。
+
+<pre>
+　Linuxサーバー管理入門　
 </pre>
 
 <h3>pタグで作られた複数行の段落から本文だけを取り出す</h3>
@@ -711,8 +789,6 @@ perl get_url.pl get_url_in.html > get_url_out.html
 http://www.perlri.com
 https://www.perlzemi.com
 </pre>
-
-<h2>この章の解説の補足</h2>
 
 <h3>ファイル全部を読み込むより簡単な方法</h3>
 
