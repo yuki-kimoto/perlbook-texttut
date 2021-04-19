@@ -17,4 +17,4 @@ my $out_html = $in_html;
 # すべての小文字を大文字に置換
 $out_html =~ s/([a-z]+)/uc $1/eg;
 
-print encode('UTF-8', "$out_html\n");
+print encode('UTF-8', $out_html);

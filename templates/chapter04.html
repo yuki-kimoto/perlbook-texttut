@@ -125,7 +125,7 @@ my $head_text;
 if ($html =~ /<h1>(.+?)<\/h1>/) {
   $head_text = $1;
 }
-print encode('UTF-8', "$head_text\n");
+print encode('UTF-8', "$head_text") . "\n";
 </pre>
 
 実行してみましょう。
@@ -173,7 +173,7 @@ my $text = $html;
 # <と>で囲まれている部分をすべて削除する
 $text =~ s/<.+?>//g;
 
-print encode('UTF-8', "$text\n");
+print encode('UTF-8', "$text") . "\n";
 </pre>
 
 正規表現の解説です。「<」がきて、改行以外のなんでもよい文字が1文字以上で最短マッチ「.+?」、「>」がくる。gオプションは、すべて置換を意味しています。
@@ -222,7 +222,7 @@ $text =~ s/^\s+//;
 # 末尾から複数の空白を取り除く
 $text =~ s/\s+$//;
 
-print encode('UTF-8', "$text\n");
+print encode('UTF-8', "$text") . "\n";
 </pre>
 
 実行してみましょう。
@@ -297,7 +297,7 @@ perl trim_ascii_simple.pl
   </p>
 </pre>
 
-正規表現を書いてみましょう。ポイントは「.」は改行以外のすべての文字にマッチするのですが、今回の場合は、改行を含めたすべての文字をマッチされる必要があります。このような場合は、「.」をすべての文字にマッチされるようにする「s」オプション(シングルラインオプション)を使用します。最短マッチでマッチさせます。
+正規表現を書いてみましょう。ポイントは「.」は「改行以外のすべての文字」にマッチするのですが、今回の場合は、改行を含めたすべての文字をマッチされる必要があります。このような場合は、「.」をすべての文字にマッチされるようにする「s」オプション(シングルラインオプション)を使用します。最短マッチでマッチさせます。
 
 <pre>
 my $text;
@@ -315,7 +315,7 @@ if ($html =~ /<p>(.*?)<\/p>/s;) {
 }
 </pre>
 
-サンプルコード全体です。
+サンプルコード全体「get_p_text.pl」です。
 
 <pre>
 use strict;
@@ -323,7 +323,6 @@ use warnings;
 use utf8;
 use Encode 'encode';
 
-# ヒアドキュメントで複数行を表現
 my $html = <<'EOS';
   <p>
     今日は、毎週土曜日更新のPerlプログラミングちゃんねるを見ています。
@@ -346,16 +345,22 @@ if ($html =~ /<p>(.*?)<\/p>/s) {
   $text =~ s/\s+/ /;
 }
 
-print encode('UTF-8', "$text\n");
+print encode('UTF-8', "$text") . "\n";
 </pre>
 
-出力結果です。
+実行してみましょう。
+
+<pre>
+perl get_p_text.pl;
+</pre>
+
+出力結果です。本文だけが取り出せています。
 
 <pre>
 今日は、毎週土曜日更新のPerlプログラミングちゃんねるを見ています。 ひげで、坊主のオジサンが雑にしゃべっているのが気になり、講義が頭の中に入ってきません。
 </pre>
 
-複数行の文字列を表現する場合に、ヒアドキュメントという機能がここでは使っています。
+複数行の文字列を表現する場合に、ヒアドキュメントという機能をここでは使っています。
 
 <pre>
 # ヒアドキュメントで複数行を表現
@@ -386,11 +391,32 @@ EOS
 
 今度は、HTMLファイルの全体を処理する方法について学んでみましょう。
 
-<h3>HTMLファイルを読み込む</h3>
+<h3>HTMLファイル全体を読み込む</h3>
 
-HTMLファイルを読み込んで、処理してみましょう。上記、ヒアドキュメントで書いた内容を、入力ファイルに書いてUTF-8で保存してみます。
+HTMLファイル全体を一度に読み込んで、処理してみましょう。
 
-ファイルの内容を一度に読み込むには、行入力演算子のセパレターを表現する特殊変数「$/」を未定義にして、ファイル入力演算子で読み込みます。ファイルから読み込んだ内容は、decode関数でデコードして、Perlの内部文字列にするのを忘れないでください。
+ファイルの内容を一度に読み込むには、まず、行入力演算子のセパレーターを表現する特殊変数「$/」を未定義値「undef」にします。localは、特殊変数などのグローバル変数を一時的に変更したい場合に、使用します。localで、変更した内容は「{}」で囲まれたスコープの終わりで、復元されます。
+
+<pre>
+# 行入力演算子のセパレーター「$/」を未定義にする
+local $/ = undef;
+</pre>
+
+次に、行入力演算子で、読み込みます。
+
+<pre>
+# 行入力演算子で読み込む
+$html = <>;
+</pre>
+
+ファイルから読み込んだ内容は、decode関数でデコードして、Perlの内部文字列にします。
+
+<pre>
+# デコードしてPerlの内部文字列へ変換
+$html = decode('UTF-8', $html);
+</pre>
+
+上記の内容を一度に書くと、次のようになります。
 
 <pre>
 # ファイル全部を読み込む
@@ -402,7 +428,7 @@ my $html;
 }
 </pre>
 
-入力ファイル「process_html_file_in.html」は、以下の内容で、UTF-8で保存してください。
+では、サンプルコードを書いてみましょう。ます、入力ファイル「proc_html_in.html」を、以下の内容で、UTF-8で保存してください。
 
 <pre>
   <p>
@@ -442,16 +468,16 @@ if ($html =~ /<p>(.*?)<\/p>/s) {
   $text =~ s/\s+/ /;
 }
 
-print encode('UTF-8', "$text\n");
+print encode('UTF-8', $text);
 </pre>
 
 次のように実行してください。
 
 <pre>
-perl process_html_file.pl process_html_file_in.html > process_html_file_out.html
+perl proc_html.pl proc_html_in.html > proc_html_out.html
 </pre>
 
-「process_html_file_out.html」ファイルには、以下の内容が出力されます。
+「proc_html_out.html」ファイルには、以下の内容が出力されます。
 
 <pre>
 今日は、毎週土曜日更新のPerlプログラミングちゃんねるを見ています。 ひげで、坊主のオジサンが雑にしゃべっているのが気になり、講義が頭の中に入ってきません。
@@ -459,7 +485,7 @@ perl process_html_file.pl process_html_file_in.html > process_html_file_out.html
 
 <h3>すべてのバナナをリンゴに置換する</h3>
 
-テキストファイル「replace_banana_apple_in.html」(UTF-8で保存)に含まれるすべてのバナナをリンゴに置換してみましょう。
+テキストファイル「replace_all_in.html」(UTF-8で保存)に含まれるすべてのバナナをリンゴに置換してみましょう。
 
 <pre>
 モジガエルは、バナナを食べています。
@@ -476,7 +502,7 @@ perl process_html_file.pl process_html_file_in.html > process_html_file_out.html
 $out_html =~ s/バナナ/リンゴ/g;
 </pre>
 
-テキストファイルに含まれるすべてのバナナをリンゴに置換するプログラム「replace_banana_apple.pl」です。
+テキストファイルに含まれるすべてのバナナをリンゴに置換するプログラム「replace_all.pl」です。
 
 <pre>
 use strict;
@@ -498,16 +524,16 @@ my $out_html = $in_html;
 # すべてのバナナをリンゴに置換
 $out_html =~ s/バナナ/リンゴ/g;
 
-print encode('UTF-8', "$out_html\n");
+print encode('UTF-8', $out_html);
 </pre>
 
 次のようにプログラムを実行します。
 
 <pre>
-perl replace_banana_apple.pl replace_banana_apple_in.html > replace_banana_apple_out.html
+perl replace_all.pl replace_all_in.html > replace_all_out.html
 </pre>
 
-出力ファイル「replace_banana_apple_out.html」の中身は以下のようになり、バナナがリンゴに置換されています。
+出力ファイル「replace_all_out.html」の中身は以下のようになり、バナナがリンゴに置換されています。
 
 <pre>
 モジガエルは、リンゴを食べています。
@@ -519,7 +545,7 @@ perl replace_banana_apple.pl replace_banana_apple_in.html > replace_banana_apple
 
 <h3>青リンゴ、赤リンゴ、黄リンゴの数を数える</h3>
 
-次のテキスト「count_apple_color_in.html」に含まれている青リンゴ、赤リンゴ、黄リンゴの数を数えてみましょう。
+次のテキスト「count_color_in.html」に含まれている青リンゴ、赤リンゴ、黄リンゴの数を数えてみましょう。
 
 <pre>
 青リンゴ、赤リンゴ、黄リンゴ、どれが好き。
@@ -531,7 +557,7 @@ perl replace_banana_apple.pl replace_banana_apple_in.html > replace_banana_apple
 
 すべて検索をするには、while構文で、正規表現のgオプションを使います。
 
-青リンゴ、赤リンゴ、黄リンゴの数を数えるプログラム「count_apple_color.pl」です。
+青リンゴ、赤リンゴ、黄リンゴの数を数えるプログラム「count_color.pl」です。
 
 <pre>
 use strict;
@@ -559,17 +585,17 @@ while ($html =~ /(青|赤|黄)リンゴ/g) {
 # リンゴの個数を記述したテキスト
 my $apple_counts_str = '';
 for my $color (sort keys %apple_counts) {
-  my $apple_count = $apple_count{$color};
-  $apple_counts_str .= "${color}リンゴ: ${apple_count}個";
+  my $apple_count = $apple_counts{$color};
+  $apple_counts_str .= "${color}リンゴ: ${apple_count}個\n";
 }
 
-print encode('UTF-8', "$apple_counts_str\n");
+print encode('UTF-8', $apple_counts_str);
 </pre>
 
 次のように実行してみましょう。
 
 <pre>
-perl count_apple_color.pl count_apple_color_in.html > count_apple_color_out.html
+perl count_color.pl count_color_in.html > count_color_out.html
 </pre>
 
 出力ファイルには、以下のように出力されます。リンゴの数を数えられていますね。
@@ -594,8 +620,6 @@ perl count_apple_color.pl count_apple_color_in.html > count_apple_color_out.html
 ３ いちご
 ４ ぶどう
 5 みかん
-
-あれあれ、全角数字と半角数字が混ざっているじゃないの?
 </pre>
 
 全角数字を半角数字に変換する「repnum_zen_to_han.pl」です。
@@ -620,7 +644,7 @@ my $out_html = $in_html;
 # 全角数字を半角数字に置換
 $out_html =~ tr/０-９/0-9/;
 
-print encode('UTF-8', "$out_html\n");
+print encode('UTF-8', $out_html);
 </pre>
 
 次のように実行してみましょう。
@@ -639,16 +663,13 @@ perl repnum_zen_to_han.pl repnum_zen_to_han_in.html > repnum_zen_to_han_out.html
 3 いちご
 4 ぶどう
 5 みかん
-
-あれあれ、全角数字と半角数字が混ざっているじゃないの?
-
 </pre>
 
 <h3>小文字の単語に大文字の単語に変換する</h3>
 
 正規表現の置換の構文を使って、英語の小文字の単語を大文字の単語に変換してみましょう。
 
-Perlの置換の構文では、eオプションを使って、置換に式を利用できます。uc関数でキャプチャした英単語を大文字に変換します。eの意味は、executeという意味だと思われます。すべて置換するのでgオプションも指定します。
+Perlの置換の構文では、eオプションを使って、置換に式を利用できます。キャプチャした英単語をuc関数で大文字に変換します。eの意味は、executeという意味だと思われます。すべて置換するのでgオプションも指定します。
 
 <pre>
 # すべての小文字を大文字に置換
@@ -687,7 +708,7 @@ my $out_html = $in_html;
 # すべての小文字を大文字に置換
 $out_html =~ s/([a-z]+)/uc $1/eg;
 
-print encode('UTF-8', "$out_html\n");
+print encode('UTF-8', $out_html);
 </pre>
 
 次のように実行してみましょう。
@@ -704,7 +725,6 @@ perl replace_lc_to_uc.pl replace_lc_to_uc_in.html > replace_lc_to_uc_out.html
 私はPENを持っています。
 
 うーん、APPLE PEN。
-
 </pre>
 
 <h3>すべての外部URLを取り出す</h3>
@@ -804,13 +824,11 @@ my $html;
 }
 </pre>
 
-これは、行入力演算子「<>」を学んだ後、行入力セパレーター「$/」を未定義「undef」にすれば、ファイルの全部を読み込めるという解説をしたためです。
+これは、行入力演算子「<>」を学んだ後に、行入力セパレーター「$/」を未定義「undef」にすれば、ファイルの全部を読み込めるという解説をしたためです。もう少し短くすることは可能です。
 
-少し長いですね。もう少し短くすることは可能です。
+Perlには、doブロック「do {}」と呼ばれる、最後に評価された値を返す機能があります。また「local $/;」は「local $/ = undef;」と同じ意味です。
 
-Perlには、doブロック「do {}」と呼ばれる、最後に評価された値を返す機能があります。また「local $/;」は「local $/ = undef;」と書かなくても、デフォルトで未定義値で初期化されます。
-
-ですので、Perlに慣れてくると、ファイル全体の読み込みは、一般的に次のように書かれることが多いです。初めて見ると「なんじゃこりゃー」と思いますね...。
+Perlに慣れてくると、ファイル全体の読み込みは、一般的に次のように書かれることが多いです。初めて見ると「なんじゃこりゃー」と思いますね...。
 
 <pre>
 # ファイル全部を読み込む
@@ -822,7 +840,7 @@ $html = decode('UTF-8', $html);
 
 上記の簡単な書き方で、ファイルの内容を読み込んで、そのまま出力するサンプルを作成してみましょう。
 
-入力ファイルは以下にします。
+入力ファイル「get_whole_file_in.html」は以下にします。
 
 <pre>
 モジガエルは、池で水浴びをしています。
@@ -845,7 +863,7 @@ my $html = do { local $/; <> };
 $html = decode('UTF-8', $html);
 
 # ファイルの内容を出力
-print encode('UTF-8', $);
+print encode('UTF-8', $html);
 </pre>
 
 次のように実行してみてください。

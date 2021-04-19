@@ -27,4 +27,4 @@ for my $color (sort keys %apple_counts) {
   $apple_counts_str .= "${color}リンゴ: ${apple_count}個\n";
 }
 
-print encode('UTF-8', "$apple_counts_str\n");
+print encode('UTF-8', $apple_counts_str);

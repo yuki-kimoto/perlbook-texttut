@@ -17,4 +17,4 @@ my $out_html = $in_html;
 # すべてのバナナをリンゴに置換
 $out_html =~ s/バナナ/リンゴ/g;
 
-print encode('UTF-8', "$out_html\n");
+print encode('UTF-8', $out_html);

@@ -11,4 +11,4 @@ my $text = $html;
 # <と>で囲まれている部分をすべて削除する
 $text =~ s/<.+?>//g;
 
-print encode('UTF-8', "$text\n");
+print encode('UTF-8', "$text") . "\n";

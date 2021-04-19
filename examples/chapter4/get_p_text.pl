@@ -25,4 +25,4 @@ if ($html =~ /<p>(.*?)<\/p>/s) {
   $text =~ s/\s+/ /;
 }
 
-print encode('UTF-8', "$text\n");
+print encode('UTF-8', "$text") . "\n";

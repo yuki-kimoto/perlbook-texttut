@@ -17,4 +17,4 @@ my $out_html = $in_html;
 # 全角数字を半角数字に置換
 $out_html =~ tr/０-９/0-9/;
 
-print encode('UTF-8', "$out_html\n");
+print encode('UTF-8', $out_html);
