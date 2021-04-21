@@ -2,17 +2,14 @@ use strict;
 use warnings;
 use utf8;
 
-# JSON::PPを読み込み、encode_json関数とdecode_json関数をインポートする
+# JSON::PPを読み込み
+# encode_json関数とdecode_json関数をインポートする
 use JSON::PP 'encode_json', 'decode_json';
 
 # ファイル全部を読み込む
-my $in_json;
-{
-  local $/ = undef;
-  $in_json = <>;
-}
+my $in_json = do { local $/; <> };
 
-# deocde_json関数でJSONデータをPerlの内部文字列を含むデータ構造に変換
+# deocde_json関数でJSONデータをPerlのデータ構造に変換
 my $books = decode_json $in_json;
 
 for my $book (@$books) {
@@ -30,7 +27,7 @@ for my $book (@$books) {
   $book->{price} = $price_zeikomi
 }
 
-# encode_json関数でPerlの内部文字列を含むデータ構造をJSONデータに変換
+# encode_json関数でPerlのデータ構造をJSONデータに変換
 my $out_json = encode_json $books;
 
 # JSONを出力

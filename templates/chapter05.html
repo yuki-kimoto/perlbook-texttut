@@ -168,7 +168,7 @@ JSONデータを読み込んで、データを加工して、出力するサン�
 
 価格のデータに10%の消費税を追加して、保存するという処理にしてみます。
 
-JSONデータを「edit_json_add_price_zei_input.json」という名前で保存します。文字コードはUTF-8にしてください。
+JSONデータを「book1_in.json」という名前で保存します。文字コードはUTF-8にしてください。
 
 <pre>
 [
@@ -203,17 +203,14 @@ use strict;
 use warnings;
 use utf8;
 
-# JSON::PPを読み込み、encode_json関数とdecode_json関数をインポートする
+# JSON::PPを読み込み
+# encode_json関数とdecode_json関数をインポートする
 use JSON::PP 'encode_json', 'decode_json';
 
 # ファイル全部を読み込む
-my $in_json;
-{
-  local $/ = undef;
-  $in_json = <>;
-}
+my $in_json = do { local $/; <> };
 
-# deocde_json関数でJSONデータをPerlの内部文字列を含むデータ構造に変換
+# deocde_json関数でJSONデータをPerlのデータ構造に変換
 my $books = decode_json $in_json;
 
 for my $book (@$books) {
@@ -231,7 +228,7 @@ for my $book (@$books) {
   $book->{price} = $price_zeikomi
 }
 
-# encode_json関数でPerlの内部文字列を含むデータ構造をJSONデータに変換
+# encode_json関数でPerlのデータ構造をJSONデータに変換
 my $out_json = encode_json $books;
 
 # JSONを出力
@@ -241,7 +238,7 @@ print $out_json;
 次のように実行してみましょう。
 
 <pre>
-perl edit_json_add_price_zei.pl edit_json_add_price_zei_input.json > edit_json_add_price_zei_output.json
+perl edit_json_add_price_zei.pl book1_in.json > book1_out.json
 </pre>
 
 出力結果です。出力データには、空白文字と改行が含まれていないので、見づらいですが、価格が税込み価格に更新されているのを確認できます。
@@ -256,40 +253,33 @@ JSONを読み込むソースコードを解説していきます。
 
 <h3>JSON::PPモジュールの読み込みと関数のインポート</h3>
 
-まず、JSONデータを扱うために、JSON::PPモジュールを読み込む必要があります。JSON::PPモジュールは、Perlのコアモジュールです。Perl 5.14からコアモジュールになりました。
+JSONデータを扱うために、JSON::PPモジュールを使います。JSON::PPモジュールは、Perl 5.14からPerlに含まれています。
 
-モジュールとは、特定の機能をまとめたものと考えてください。use文を使って、モジュールを読み込むことができます。
+use文を使って、JSON::PPモジュールを読み込みます。モジュールを読み込むと同時に、利用する関数をインポートすることができます。
 
 <pre>
-# JSON::PPを読み込み、encode_json関数とdecode_json関数をインポートする
+# JSON::PPを読み込み
+# encode_json関数とdecode_json関数をインポートする
 use JSON::PP 'encode_json', 'decode_json';
 </pre>
 
-モジュールの読み込むときに、必要な関数のインポートも同時に行っています。関数のインポートを行うと、その関数が使えるようになります。
+Perlのデータ構造からJSONデータを生成するencode_json関数をインポートしています。
 
-Perlのデータ構造からJSONデータを生成するためにencode_json関数をインポートしています。
-
-JSONデータをPerlのデータ構造にするためにdecode_json関数をインポートしています。
+JSONデータをPerlのデータ構造にするdecode_json関数をインポートしています。
 
 <h3>JSONデータをファイルから読み込みPerlのデータ構造に変換する</h3>
 
-次に、JSONデータをファイルから読み込みPerlのデータ構造に変換します。
+JSONデータをファイルから読み込みます。
 
 <pre>
 # ファイル全部を読み込む
-my $in_json;
-{
-  local $/ = undef;
-  $in_json = <>;
-}
+my $in_json = do { local $/; <> };
 </pre>
 
-ファイルの読み込みは、以前に解説したものと同じです。一つ注意してほしいのはEncodeモジュールのdecode関数で、読み込んだデータをPerlの内部文字列に変換していないところです。これは、decode_json関数が、JSONデータをPerlの内部文字列を含むデータ構造に変換してくれるので、書く必要がないためです。
-
-次に、deocde_json関数でJSONデータをPerlの内部文字列を含むデータ構造に変換します。
+次に、deocde_json関数でJSONデータをPerlのデータ構造に変換します。JSONの文字列は、Perlの内部文字列に変換されます。
 
 <pre>
-# deocde_json関数でJSONデータをPerlの内部文字列を含むデータ構造に変換
+# deocde_json関数でJSONデータをPerlのデータ構造に変換
 my $books = decode_json $in_json;
 </pre>
 
@@ -321,16 +311,14 @@ $booksは、以下のようなPerlのデータ構造になっています。
 ]
 </pre>
 
-Perlでは、これを理解するのが少し大変です。これは、ハッシュの配列と呼ばれるデータ構造ですが、Perlでは、多次元データ構造を表現するためには、リファレンスと呼ばれる機能を使う必要があります。少し回り道をして、リファレンスについて詳しく解説します。
+Perlでは、上記のデータ構造を理解するのにリファレンスの知識が必要になります。ハッシュの配列と呼ばれるデータ構造ですが、Perlでは、多次元データ構造を表現するのに、リファレンスとういう機能を使います。リファレンスについては、この後、詳しく解説します。
 
 <h3>Perlのデータ構造をJSONデータに変換する</h3>
-
-リファレンス解説の前にJSONの出力の部分だけ解説しておきますね。
 
 Perlのデータ構造をJSONデータに変換するにはJSON::PPモジュールのencode_json関数を使用します。
 
 <pre>
-# encode_json関数でPerlの内部文字列を含むデータ構造をJSONデータに変換
+# encode_json関数でPerlデータ構造をJSONデータに変換
 my $out_json = encode_json $books;
 </pre>
 
@@ -341,10 +329,10 @@ print文で出力して、リダイレクトを使ってファイルに書き込
 print $out_json;
 </pre>
 
-リダイレクトを使って、ファイルに書き込み。
+以下のようにプログラムを実行します。
 
 <pre>
-perl edit_json_add_price_zei.pl edit_json_add_price_zei_input.json > edit_json_add_price_zei_output.json
+perl edit_json_add_price_zei.pl book1_in.json > book1_out.json
 </pre>
 
 出力されたファイルの内容は、消費税が10%加算されたJSONデータです。
@@ -353,7 +341,7 @@ perl edit_json_add_price_zei.pl edit_json_add_price_zei_input.json > edit_json_a
 [{"name":"Perlテキスト処理プログラミング入門","author_name":"木本裕紀","price":3190,"issued_date":"2021-01-03","id":1},{"id":2,"issued_date":"2021-01-03","name":"Web開発をやるぜPerl","author_name":"木本裕紀","price":2200},{"id":3,"issued_date":"2019-03-06","author_name":"田中太郎","name":"データベース入門","price":2090}]
 </pre>
 
-<h2>リファレンスの作成</h2>
+<h2>リファレンス</h2>
 
 リファレンスについて解説していきます。ここからは、しばらく、日本語の扱いについては、忘れてください。データ構造の出力を簡単に見るために、日本語については、いったんおいておき、Perlでひと手間かかる部分を、最後に解説します。
 
