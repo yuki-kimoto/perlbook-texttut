@@ -1,1 +1,1 @@
-[{"name":"モジガエルのPerlテキスト処理プログラミング入門","price":2320,"id":"1","issued_date":"2021-01-03","author_name":"木本裕紀"},{"issued_date":"2020-12-06","author_name":"木本裕紀","id":"2","price":1600,"name":"PerlでWebシステム開発"}]
+[{"name":"モジガエルのPerlテキスト処理プログラミング入門","price":2320,"id":"1","author_name":"木本裕紀","issued_date":"2021-01-03"},{"name":"PerlでWebシステム開発","id":"2","author_name":"木本裕紀","price":1600,"issued_date":"2020-12-06"}]
