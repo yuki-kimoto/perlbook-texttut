@@ -1,0 +1,11 @@
+perlテキスト処理のエッセンス
+
+入稿データ：perltextcover_print_OL.ai
+出力見本：perltextcover_print_OL見本.pdf
+
+サイズ：A5
+背幅：7mm
+環境
+illustrator cs5
+OS:mac
+文字アウトライン済み
