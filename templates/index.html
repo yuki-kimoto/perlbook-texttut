@@ -31,7 +31,6 @@ Perlテキスト処理のエッセンス
 
 電子書籍 1117円(25%off)
 
-
 <h3>印刷</h3>
 
 本文ページ数は、120pになった。
@@ -50,35 +49,57 @@ Perlテキスト処理のエッセンス
 
 30部 19,393円 単価 646円
 
-<h3>Kindle</h3>
-
-PDFをKindleで販売できるようにするにはKindle Comic Creatorを使う
-
-<a href="https://www.amazon.co.jp/gp/feature.html?ie=UTF8&docId=3077699036">Kindle Comic Creator</a>
-
-本の言語 日本語
-
-Kindleパネルビュー いいえ
-
-本の組方向 アンロック
-
-本のページ進行方向 左から右へ
-
-DRMは
-
 <h3>wkhtmltopdf</h3>
 
-wkhtmltopdf 0.12.3 (with patched qt)
+<h4>wkhtmltopdfのインストール</h4>
 
-一番上のmargin-topは効かない。
+インストール手順。wkhtmltopdfのインストールは難しい。
 
-wkhtmltopdfはインストールが難し
-
-SSLのエラーを回避するには以下が必要
+依存ライブラリ。SSLのエラーを回避。
 
 <pre>
-sudo apt install libssl1.0-dev
+sudo apt install -y libxrender1
+sudo apt install -y libssl1.0-dev
+sudo apt install -y libfontconfig
+sudo apt install -y fonts-ipafont
 </pre>
+
+wkhtmltopdfのインストール
+
+<pre>
+sudo wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+sudo tar xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+sudo mv wkhtmltox/bin/wkhtmlto* /usr/bin/
+sudo ln -nfs /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
+</pre>
+
+確認。
+
+<pre>
+/usr/local/bin/wkhtmltopdf --version
+</pre>
+
+出力結果
+
+<pre>
+wkhtmltopdf 0.12.3 (with patched qt)
+</pre>
+
+PDF::API2のインストール
+
+<pre>
+cpanm PDF::API2
+</pre>
+
+IPAフォントのインストール
+
+<pre>
+sudo apt install -y fonts-ipafont
+</pre>
+
+<h4>wkhtmltopdfの注意点</h4>
+
+一番上のmargin-topは効かない。
 
 --lowqualityを指定しないと、章見出しがずれるのはなぜ?
 
@@ -93,3 +114,20 @@ display:flexは使えない。widthにculcは使えない。
 画像に設定した、ボーダーがうまく表示されない。枠囲みは、画像ソフトでやる必要がある。
 
 ソースコードの横の文字数は、50字と少ししか使えないから工夫する
+
+<h3>Kindle</h3>
+
+PDFをKindleで販売できるようにするにはKindle Comic Creatorを使う
+
+<a href="https://www.amazon.co.jp/gp/feature.html?ie=UTF8&docId=3077699036">Kindle Comic Creator</a>
+
+本の言語 日本語
+
+Kindleパネルビュー いいえ
+
+本の組方向 アンロック
+
+本のページ進行方向 左から右へ
+
+DRMは、はい。
+
