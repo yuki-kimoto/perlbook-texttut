@@ -25,8 +25,8 @@ my $wkhtmltopdf_cmd = '/usr/local/bin/wkhtmltopdf';
 my $page_size = 'A5';
 
 # マージン
-my $margin_top = '10mm';
-my $margin_bottom = '10mm';
+my $margin_top = '13mm';
+my $margin_bottom = '7mm';
 my $margin_left = '13mm';
 my $margin_right = '13mm';
 
@@ -172,10 +172,13 @@ sub create_each_chapter_pdf_files {
 sub create_pdf_file {
   my ($wkhtmltopdf_cmd_with_opt, $input_html_file, $output_pdf_file) = @_;
   
-  my $wkhtmltopdf_cmd_with_opt_and_args = "$wkhtmltopdf_cmd_with_opt $input_html_file $output_pdf_file";
-  
-  system($wkhtmltopdf_cmd_with_opt_and_args) == 0
-    or die "Can't create PDF file from $input_html_file to $output_pdf_file: $wkhtmltopdf_cmd_with_opt_and_args";
+  # 静的ファイルのコピーロジックが現在のGiblogでは間違っているために、キャッシュロジックを一時的に解除
+  # if (-M $input_html_file < -M $output_pdf_file) {
+    my $wkhtmltopdf_cmd_with_opt_and_args = "$wkhtmltopdf_cmd_with_opt $input_html_file $output_pdf_file";
+    
+    system($wkhtmltopdf_cmd_with_opt_and_args) == 0
+      or die "Can't create PDF file from $input_html_file to $output_pdf_file: $wkhtmltopdf_cmd_with_opt_and_args";
+  # }
 }
 
 sub concat_pdf_file {
@@ -233,8 +236,8 @@ sub concat_pdf_file {
         if ($all_pdf->pages % 2 != 0) {
           my $page_all_pdf = $all_pdf->openpage($all_pdf->pages);
           my $text_all_pdf = $page_all_pdf->text();
-          $text_all_pdf->font($font, 10);
-          $text_all_pdf->translate(400, 575);
+          $text_all_pdf->font($font, 8.5);
+          $text_all_pdf->translate(400, 561);
           my $chapter_title = $chapter_titles->[$chapter_number - 1];
           $text_all_pdf->text_right($chapter_title);
         }
@@ -258,11 +261,11 @@ sub concat_pdf_file {
 
     # 右開き奇数
     if ($display_page_number % 2 != 0) {
-      $text_page_number->translate(400, 12);
+      $text_page_number->translate(388, 18);
     }
     # 左開き偶数
     else {
-      $text_page_number->translate(15, 12);
+      $text_page_number->translate(20, 18);
     }
     $text_page_number->text($display_page_number);
   }
