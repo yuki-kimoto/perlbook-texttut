@@ -16,6 +16,9 @@
     color:#0000EE;
   }
   
+  img {
+    width:100%;
+  }
   p {
     font-size:16px;
     letter-spacing:0.5px;
@@ -26,7 +29,6 @@
   
   /* container */
   .container {
-    background:#eee;
   }
   
   /* main */
@@ -117,7 +119,7 @@
   /* 章扉 */
   .chapter_title {
     height:300mm;
-    background:#f3f3f3;
+    color:#330000
   }
   .chapter_title h1 {
     font-size:40px;
@@ -130,9 +132,10 @@
   
   /* 章本文 */
   .chapter_description {
-    border:1px solid #ddd;
+    border:1px solid #f9e21a;
     border-radius:5px;
     overflow:hidden;
+    background:#fffee5;
   }
   .chapter_description_left {
     float:left;
@@ -153,19 +156,19 @@
   
   .chapter h2 {
     font-size:18px;
-    background:#F5F5F5;
+    background:#1C825F;
     letter-spacing:1px;
     margin:18px 0 10px 0;
-    background:#F5F5F5;
     padding:16px 12px 14px 12px;
+    color:white; 
   }
 
   .chapter h3 {
     font-size:18px;
     letter-spacing:1px;
-    margin:10px 0 8px 0;
-    padding:10px 0px 10px 3px;
-    border-bottom:dashed 1px #ddd;
+    margin:20px 0 16px 0;
+    padding:0px 0px 0px 10px;
+    border-left:solid 10px #1C825F;
   }
   .chapter h4 {
     font-size:15px;
@@ -176,7 +179,7 @@
   pre {
     font-size:15px;
     background:#FCFCFC;
-    border:1px solid #CCCCCC;
+    border:1px solid #eFeEd5;
     border-radius:5px;
     padding:10px 10px;
     margin:10px 0;
@@ -209,7 +212,7 @@
   table th {
     border:1px solid #ddd;
     padding:7px;
-    background:#eee;
+    background:#efe;
     font-weight:bold;
   }
 
