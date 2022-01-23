@@ -32,9 +32,27 @@ sub run {
 
     # Get content from file in templates directory
     $api->get_content($data);
-
+    
     # Parse Giblog syntax
     $api->parse_giblog_syntax($data);
+
+    # Coloring source code
+    {
+      my $start_pre;
+      my @lines = split(/\n/, $data->{content});
+      for my $line (@lines) {
+        if ($line =~ m|^<pre\b|i) {
+          $start_pre = 1;
+        }
+        elsif ($line =~ m|^</pre>|i) {
+          $start_pre = 0;
+        }
+        if ($start_pre) {
+          $line =~ s|(#.+)|<span style="color:green">$1</span>|;
+        }
+      }
+      $data->{content} = join("\n", @lines);
+    }
 
     # Parse title
     $api->parse_title_from_first_h_tag($data);
