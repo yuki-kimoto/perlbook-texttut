@@ -1,13 +1,39 @@
-Create new entry
+Environment Building
 
-  giblog add
+  Needed Tools
   
-Build web site
+    wkhtmltopdf
+   
+     In the case of the author, the version is  0.12.3 on Ubuntu 18
 
+      sudo wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+      sudo tar xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+      sudo mv wkhtmltox/bin/wkhtmlto* /usr/bin/
+      sudo ln -nfs /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
+      /usr/local/bin/wkhtmltopdf --version
+
+    perl 
+   
+      In the case of the author, he use <a href="https://en.perlzemi.com/blog/20110220130464.html">perlbrew</a>
+      to install Perl.
+     
+    cpanm
+   
+      perlbrew install-cpanm
+
+    Perl modules
+  
+      cpanm Giblog PDF::API2
+
+Book contents
+
+  templates/chapter*
+
+Create the book
+  
   giblog build
+  perl create_book_pdf.pl
 
-Serve web site. You need to install Mojolicious from CPAN.
+Serve the book
 
-  morbo serve.pl
-
-These file is copied from Giblog/Command/new_website/proto directory.
+  giblog serve
